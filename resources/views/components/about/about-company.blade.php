@@ -2,7 +2,7 @@
 <!--Reasons Start-->
 <section class="reasons">
     <div class="container">
-        <div class="row align-items-center">
+        <div class="row">
             <div class="col-xl-6 col-lg-6 ">
                 <div class=" position-sticky top-0">
                     <div class="thm-swiper__slider swiper-container mb-4" data-swiper-options='{"spaceBetween": 100, "slidesPerView": 3, "autoplay": { "delay": 4000 }, "breakpoints": {
@@ -35,19 +35,19 @@
 
                             @foreach($aboutCompany->company_image as $company)
                             <div class="swiper-slide">
-                                <img class="lazy  img-fluid" data-original="{{ asset($company) }}" alt="">
+                                <img class="lazy  img-fluid" data-original="{{ asset('admin/image/section/company_image')}}/{{$company}}" alt="">
                             </div>
                             @endforeach
 
                         </div>
                     </div>
-                    <div class=" text-wrap">
+                    <div class=" text-wrap ">
                         <strong>{{ $aboutCompany->company_title }}</strong>
                     </div>
                 </div>
             </div>
             <div class="col-xl-6 col-lg-6">
-                <div class="reasons__right">
+                <div class="reasons__right aboutcompany text-justify">
                     {!! $aboutCompany->company_description !!}
                 </div>
             </div>

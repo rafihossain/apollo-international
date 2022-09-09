@@ -11,9 +11,14 @@ class HomeFaq extends Component
      *
      * @return void
      */
-    public function __construct()
+    
+    public $faq;
+    public $faqs;
+    
+    public function __construct($faq, $faqs)
     {
-        //
+        $this->faq = $faq;
+        $this->faqs = $faqs;
     }
 
     /**

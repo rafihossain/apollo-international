@@ -5,7 +5,8 @@ namespace App\Http\Controllers\backend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Testimonial;
-use Image;
+use Illuminate\Support\Str;
+use Image; 
 use File;
 
 class TestimonialController extends Controller
@@ -14,7 +15,9 @@ class TestimonialController extends Controller
         $request->validate([
             'user_name' => 'required',
             'user_comment' => 'required',
-            'user_image' => 'required',
+            'user_image' => 'required|mimes:jpg,png',
+            'user_video_url'=>'required',
+            //'user_video'=>'required|mimes:mp4',
             'user_rating' => 'required',
         ]);
     }
@@ -22,6 +25,9 @@ class TestimonialController extends Controller
         $request->validate([
             'user_name' => 'required',
             'user_comment' => 'required',
+            'user_image' => 'mimes:jpg,png',
+            //'user_video'=>'mimes:mp4',
+            'user_video_url'=>'required',
             'user_rating' => 'required',
         ]);
     }
@@ -43,11 +49,26 @@ class TestimonialController extends Controller
 
         return $thumbnail;
     }
-    protected function testimonialBasicInfoSave($request, $imageUrl){
+    
+     protected function testimonialVideoUpload($request){
+        $uservideo = $request->file('user_video');
+        $name=Str::random(20);
+        $ext=strtolower($uservideo->getClientOriginalExtension());
+        $image_full_name='testimonial_video_'.$name.'.'.$ext;
+        $upload_path='admin/image/testimonial/';
+        $success=$uservideo->move($upload_path,$image_full_name);
+
+        return $image_full_name;
+    }
+    
+    protected function testimonialBasicInfoSave($request,$imageUrl){
+
         $testimonial = new Testimonial;
         $testimonial->user_name = $request->user_name;
         $testimonial->user_comment = $request->user_comment;
         $testimonial->user_image = $imageUrl;
+        //$testimonial->testimonial_video=$videoUrl;
+        $testimonial->user_video_url=$request->user_video_url;
         $testimonial->user_rating = $request->user_rating;
         if(isset($request->user_status)){
             $testimonial->user_status = 1;
@@ -56,12 +77,19 @@ class TestimonialController extends Controller
         }
         $testimonial->save();
     }
-    protected function testimonialBasicInfoUpdate($request, $testimonial, $imageUrl=null){
+    
+    protected function testimonialBasicInfoUpdate($request, $testimonial, $imageUrl="")
+    {
         $testimonial->user_name = $request->user_name;
         $testimonial->user_comment = $request->user_comment;
         if($imageUrl){
             $testimonial->user_image = $imageUrl;
         }
+        // if($videoUrl){
+          
+        //     $testimonial->testimonial_video = $videoUrl;
+        // }
+        $testimonial->user_video_url=$request->user_video_url;
         $testimonial->user_rating = $request->user_rating;
         if(isset($request->user_status)){
             $testimonial->user_status = 1;
@@ -69,6 +97,10 @@ class TestimonialController extends Controller
             $testimonial->user_status = 2;
         }
         $testimonial->save();
+    }
+    
+    public function addTestimonial(){
+        return view('backend.testimonial.add_testimonial');
     }
     public function manageTestimonial(){
         $testimonials = Testimonial::get();
@@ -76,12 +108,10 @@ class TestimonialController extends Controller
             'testimonials' => $testimonials
         ]);
     }
-    public function addTestimonial(){
-        return view('backend.testimonial.add_testimonial');
-    }
     public function saveTestimonial(Request $request){
         $this->testimonialInfoValidateSave($request);
         $imageUrl = $this->testimonialImageUpload($request);
+        //$videoUrl = $this->testimonialVideoUpload($request);
         $this->testimonialBasicInfoSave($request, $imageUrl);
 
         return redirect()->route('backend.manage-testimonial')->with('success', 'Testimonial has been added successfully !!');
@@ -95,20 +125,38 @@ class TestimonialController extends Controller
     public function updateTestimonial(Request $request){
         $this->testimonialInfoValidateUpdate($request);
         $userImage = $request->file('user_image');
+        //$uservideo = $request->file('user_video');
         $testimonial = Testimonial::find($request->id);
 
         if($userImage){
+          
             if (File::exists($testimonial->user_image)) {
                 unlink($testimonial->user_image);
             }
             $imageUrl = $this->testimonialImageUpload($request);
             $this->testimonialBasicInfoUpdate($request, $testimonial, $imageUrl);
-        }else{
+        }
+        // else if($uservideo)
+        // {
+
+        //     if (File::exists('admin/image/testimonial/'.$testimonial->testimonial_video)) {
+        //         //unlink('admin/image/testimonial/'.$testimonial->testimonial_video);
+        //     }
+        //     $videoUrl = $this->testimonialVideoUpload($request);
+   
+        //     $this->testimonialBasicInfoUpdate($request, $testimonial,$imageUrl="",$videoUrl);
+             
+        // }
+        else{
             $this->testimonialBasicInfoUpdate($request, $testimonial);
         }
         return redirect()->route('backend.manage-testimonial')->with('success', 'Testimonial has been updated successfully !!');
     }
     public function deleteTestimonial($id){
+        $testimonial=Testimonial::find($id);
+         if (File::exists('admin/image/testimonial/'.$testimonial->testimonial_video)) {
+                unlink('admin/image/testimonial/'.$testimonial->testimonial_video);
+            }
         Testimonial::where('id', $id)->delete();
         return redirect()->route('backend.manage-testimonial')->with('success', 'Testimonial has been deleted successfully !!');
     }

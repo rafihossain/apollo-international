@@ -38,6 +38,8 @@
                             <option value="about_director_message"  @if($one_section['section_type'] == 'about_director_message') selected @endif>About Director Message</option>
                             <option value="about_our_team" @if($one_section['section_type'] == 'about_our_team') selected @endif>About Our Team</option>
                             <option value="about_vision" @if($one_section['section_type'] == 'about_vision') selected @endif>About Vision</option>
+                            <option value="carrer_section" @if($one_section['section_type'] == 'carrer_section') selected @endif>Carrer</option>
+                            <option value="franchise_section" @if($one_section['section_type'] == 'franchise_section') selected @endif>Franchise Options</option>
                         </select>
                     </div>
                 </div>
@@ -78,7 +80,28 @@
                     <label> Banner Image or Video </label> 
                     <input type="file" class="imageupload" data-height="200" name="banner_image[]" data-default-file="{{asset($sections['banner_image'])}}"/> 
                     <input type="hidden" name="old_banner_image[]" value="{{$sections['banner_image']}}">
-                </div> 
+                </div>
+                
+                <div class="form-group mb-2">
+                    <label>Publish Country</label>
+                    <select class="form-control form-control @error('country') is-invalid @enderror" name="country[]">
+                        <option value="">Select Country</option>
+                        <option value="0" {{$sections['country'] == 0 ? 'selected' : ''}}>All</option>
+                        <option value="1" {{$sections['country'] == 1 ? 'selected' : ''}}>Australia</option>
+                        <option value="2" {{$sections['country'] == 2 ? 'selected' : ''}}>Bangladesh</option>
+                        <option value="3" {{$sections['country'] == 3 ? 'selected' : ''}}>Nepal</option>
+                        <option value="4" {{$sections['country'] == 4 ? 'selected' : ''}}>Malaysia</option>
+                        <option value="5" {{$sections['country'] == 5 ? 'selected' : ''}}>India</option>
+                        <option value="6" {{$sections['country'] == 6 ? 'selected' : ''}}>SriLanka</option>
+                        <option value="7" {{$sections['country'] == 7 ? 'selected' : ''}}>Pakistan</option>
+                        <option value="8" {{$sections['country'] == 8 ? 'selected' : ''}}>China</option>
+                    </select>
+                    @error('country')
+                    <strong class="text-danger">{{ $message }}</strong>
+                    @enderror
+                </div>
+                
+                
             </div> 
         </div>
       <?php } } ?>      
@@ -267,7 +290,7 @@
                 </div>
                 <div class="form-group mb-2">
                     <label>Image</label>
-                    <input type="file" class="imageupload" name="faq_image" data-default-file="{{asset($home_faq['faq_image'])}}">
+                    <input type="file" class="imageupload" name="faq_image" data-default-file="{{ asset('admin/image/section/faq-image/thumbnail')}}/{{$home_faq['faq_image']}}">
                     <input type="hidden" name="old_faq_image" id="" value="{{$home_faq['faq_image']}}">
                     @error('faq_image')
                     <strong class="text-danger">{{ $message }}</strong>
@@ -410,7 +433,7 @@
 
 @if($one_section['section_type'] == 'home_current_scholarship')
 <?php $current_scholarship=json_decode($one_section['section_value'],true); ?>
-<div id="">
+    <div id="">
         <h3>Current scholarship</h3>
         <div class="contentslider">
             <div class="card">
@@ -423,11 +446,53 @@
                         @enderror
                     </div>
                     <div class="form-group mb-2">
-                        <label>Image</label> <input type="file" class="imageupload" name="current_scholarship_image[]" multiple>
+                        <label>Scholarship Image AU</label> <input type="file" class="imageupload" name="current_scholarship_image[]" multiple>
                         <input type="hidden" name="old_current_scholarship_image" value="{{json_encode($current_scholarship['current_scholarship_image'])}}">
                         @error('current_scholarship_image')
                         <strong class="text-danger">{{ $message }}</strong>
                         @enderror
+                    </div>
+                    <div class="form-group mb-2">
+                        <label>Old Image AU</label>
+                        <div class="overflow-hidden">
+                        @if($current_scholarship['current_scholarship_image'])
+                            @foreach($current_scholarship['current_scholarship_image'] as $key=>$current_images)
+                                @if($current_images['country'] == 1)
+                                <div class="card-body" style="float:left;" id="delete_current{{$key}}">
+                                    <div style="position:relative;">
+                                        <a href="#" delete-id="{{$key}}" data-id="{{$one_section['id']}}" image-name="{{$current_images['name']}}" class="delete" style="position:absolute; left:0; right:0;"><span class="close btn btn-info">&Cross;</span></a>
+                                        <img src="{{ asset('admin/image/section/current_scholarship')}}/{{$current_images['name']}}" width="200px" height="200px" class="image" />
+                                    </div>
+                                </div>
+                                @endif
+                            @endforeach
+                        @endif
+                        </div>
+                    </div>
+                    <div class="form-group mb-2">
+                        <label>Scholarship Image BD</label>
+                        <input type="file" class="imageupload" name="current_scholarship_image_bd[]" multiple>
+                        <input type="hidden" name="old_current_scholarship_image_bd" value="">
+                        @error('old_current_scholarship_image_bd')
+                        <strong class="text-danger">{{ $message }}</strong>
+                        @enderror
+                    </div>
+                    <label>Old Image BD</label>
+                    <div class="form-group mb-2">
+                        <div class="overflow-hidden">
+                        @if($current_scholarship['current_scholarship_image'])
+                            @foreach($current_scholarship['current_scholarship_image'] as $key=>$current_images)
+                                @if($current_images['country'] == 2)
+                                <div class="card-body" style="float:left;" id="delete_current{{$key}}">
+                                    <div style="position:relative;">
+                                        <a href="#" delete-id="{{$key}}" data-id="{{$one_section['id']}}" image-name="{{$current_images['name']}}" class="delete" style="position:absolute; left:0; right:0;"><span class="close btn btn-info">&Cross;</span></a>
+                                        <img src="{{ asset('admin/image/section/current_scholarship')}}/{{$current_images['name']}}" width="200px" height="200px" class="image" />
+                                    </div>
+                                </div>
+                                @endif
+                            @endforeach
+                        @endif
+                        </div>
                     </div>
                 </div>
 
@@ -464,6 +529,19 @@
                         @error('company_image')
                         <strong class="text-danger">{{ $message }}</strong>
                         @enderror
+                    </div>
+                     <label>Old Image</label>
+                    <div class="form-group mb-2">
+                      @if($about_the_company['company_image'])  
+                        @foreach($about_the_company['company_image'] as $key=>$current_images)                           
+                           <div class="card-body" style="float:left;" id="delete_company{{$key}}">
+                              <div style="position:relative;"> 
+                                <a href="#" delete-id="{{$key}}" data-id="{{$one_section['id']}}" image-name="{{$current_images}}" class="delete_company_image" style="position:absolute; left:0; right:0;"><span class="close btn btn-info">&Cross;</span></a>
+                                    <img src="{{ asset('admin/image/section/company_image/thumbnail')}}/{{$current_images}}" width="200px" height="200px" class="image" />
+                                </div>
+                            </div>
+                        @endforeach
+                      @endif  
                     </div>
                 </div>
 
@@ -578,6 +656,67 @@
         </div>
 </div>
 @endif
+
+@if($one_section['section_type'] == 'carrer_section')
+<div id="">
+        <h3>Carrer</h3>
+        <div class="contentslider">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-group mb-2">
+                        <label>Carrer Description</label>
+                        <textarea name="carrer_description" id="editor5" class="form-control">{{$one_section['section_value']}}</textarea>
+                        @error('carrer_description')
+                        <strong class="text-danger">{{ $message }}</strong>
+                        @enderror
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+@endif
+
+@if($one_section['section_type'] == 'franchise_section')
+<div id="">
+        <h3>Franchise Options</h3>
+        <div class="contentslider">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-group mb-2">
+                        <label>Franchise Description</label>
+                        <textarea name="franchise_description" id="editor6" class="form-control">{{$one_section['section_value']}}</textarea>
+                        @error('franchise_description')
+                        <strong class="text-danger">{{ $message }}</strong>
+                        @enderror
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+@endif
+
+@if($one_section['section_type'] == 'scholarship_section')
+    <div id="">
+        <h3>Scholarship</h3>
+        <div class="contentslider">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-group mb-2">
+                        <label>Scholarship Description</label>
+                        <textarea name="scholarship_description" id="summernote" class="form-control">{!!$one_section['section_value']!!}</textarea>
+                        @error('scholarship_description')
+                        <strong class="text-danger">{{ $message }}</strong>
+                        @enderror
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
+
     <div class="text-center">
         <button class="btn btn-primary" type="submit"> Save Section </button>
     </div>
@@ -585,6 +724,20 @@
 
 
 <script type="text/javascript">
+  $('#summernote').summernote({
+        placeholder: 'Hello stand alone ui',
+        tabsize: 2,
+        height: 220,
+        toolbar: [
+          ['style', ['style']],
+          ['font', ['bold', 'underline', 'clear']],
+          ['color', ['color']],
+          ['para', ['ul', 'ol', 'paragraph']],
+          ['table', ['table']],
+          ['insert', ['link', 'picture', 'video']],
+          ['view', ['fullscreen', 'codeview', 'help']]
+        ]
+      });
     ClassicEditor.create(document.querySelector('#editor1'))
         .then(editor => {
             editor.ui.view.editable.element.style.height = '300px';
@@ -613,7 +766,29 @@
         })
         .catch(error => {
             console.error(error);
-        });     
+        });
+     
+    ClassicEditor.create(document.querySelector('#editor5'))
+        .then(editor => {
+            editor.ui.view.editable.element.style.height = '300px';
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    ClassicEditor.create(document.querySelector('#editor6'))
+        .then(editor => {
+            editor.ui.view.editable.element.style.height = '300px';
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    ClassicEditor.create(document.querySelector('#editor7'))
+        .then(editor => {
+            editor.ui.view.editable.element.style.height = '300px';
+        })
+        .catch(error => {
+            console.error(error);
+        });
 
     $('#home_about_us').hide();
     $('#skill_id').hide();
@@ -688,16 +863,17 @@
     });
 
     $(".addbanner").click(function() {
-        $('.bannercontent').append('<h4>Banner</h4><div class="card"> <div class="card-body"> <div class="form-group mb-2"> <label>Banner Title</label> <input type="text" class="form-control" name="banner_title[]"> </div> <div class="form-group mb-2"> <label>Banner Content</label> <textarea class="form-control" name="banner_content[]" placeholder="Description"></textarea> </div> <div class="form-group mb-2"> <label> Banner Link </label> <input type="text" class="form-control" name="banner_link[]"> </div> <div class="form-group mb-2"> <label> Banner Image or Video </label> <input type="file" class="imageupload" name="banner_image[]" data-height="200" multiple required/> </div> </div> </div>');
+        $('.bannercontent').append('<h4>Banner</h4><div class="card"> <div class="card-body"> <div class="form-group mb-2"> <label>Banner Title</label> <input type="text" class="form-control" name="banner_title[]" required> </div> <div class="form-group mb-2"> <label>Banner Content</label> <textarea class="form-control" name="banner_content[]" placeholder="Description" required></textarea> </div> <div class="form-group mb-2"> <label> Banner Link </label> <input type="text" class="form-control" name="banner_link[]" required> </div> <div class="form-group mb-2"> <label> Banner Image or Video </label> <input type="file" class="imageupload" name="banner_image[]" data-height="200" multiple required/></div><div class="form-group mb-2"><label>Publish Country</label><select class="form-control" name="country[]"><option value="0">All</option><option value="1">Australia</option><option value="2">Bangladesh</option><option value="3">Nepal</option><option value="4">Malaysia</option><option value="5">India</option><option value="6">SriLanka</option><option value="7">Pakistan</option><option value="8">China</option></select></div></div></div>');
         $('.imageupload').dropify();
     });
+    
     $("body").delegate(".removecontentsection", "click", function() {
         $(this).closest('.card').remove();
     });
 
 
     $(".addpagesection").click(function() {
-        $('.contentsection').append('<div class="card"> <div class="card-body"> <div class="row align-items-end"><div class="col-5"> <div class="form-group"><label>Partner category</label> <select class="form-control" name="partner_category[]" id=""><option value="">Select Category</option><option value="australia">Australia</option><option value="canada">Canada</option><option value="partner">Professional Year Partners</option><option value="health">Health Insurance</option><option value="accreditation">Professional Accreditation</option><option value="scholarship">PCurrent Scholarships</option></select></div> </div> <div class="col-5"><div class="form-group"><label>Number of partner</label> <input type="number" class="form-control" name="no_of_partner[]"></div></div><div class="col-2"> <button class="btn btn-danger removecontentsection" type="button"><i class="mdi mdi-trash-can-outline"></i></button> </div> </div> </div> </div>');
+        $('.contentsection').append('<div class="card"> <div class="card-body"> <div class="row align-items-end"><div class="col-5"> <div class="form-group"><label>Partner category</label> <select class="form-control" name="partner_category[]" id="" required><option value="">Select Category</option><option value="australia">Australia</option><option value="canada">Canada</option><option value="partner">Professional Year Partners</option><option value="health">Health Insurance</option><option value="accreditation">Professional Accreditation</option><option value="scholarship">PCurrent Scholarships</option></select></div> </div> <div class="col-5"><div class="form-group"><label>Number of partner</label> <input type="number" class="form-control" name="no_of_partner[]" required></div></div><div class="col-2"> <button class="btn btn-danger removecontentsection" type="button"><i class="mdi mdi-trash-can-outline"></i></button> </div> </div> </div> </div>');
     });
     $("body").delegate(".removecontentsection", "click", function() {
         $(this).closest('.card').remove();
@@ -743,5 +919,47 @@
             ]
         }
     })
+    
+        $('.delete').click(function(e) {
+            e.preventDefault();
+            var id=$(this).attr('data-id');
+            var div_id=$(this).attr('delete-id');
+            var image_name=$(this).attr('image-name');
+            
+
+            jQuery.ajax({
+              type: 'get',
+              url: "{{route('backend.delete_current_image')}}",
+              data: {
+                id: id,
+                image_name: image_name,
+              },
+              success: function(data) {
+                $('#delete_current' + div_id).remove();
+                // location.reload();
+              }
+          });
+    });
+    
+     $('.delete_company_image').click(function(e) {
+            e.preventDefault();
+            var id=$(this).attr('data-id');
+            var div_id=$(this).attr('delete-id');
+            var image_name=$(this).attr('image-name');
+          
+
+            jQuery.ajax({
+              type: 'get',
+              url: "{{route('backend.delete_company_image')}}",
+              data: {
+                id: id,
+                image_name: image_name,
+              },
+              success: function(data) {
+                $('#delete_company' + div_id).remove();
+                // location.reload();
+              }
+          });
+    });
 </script>
 @endsection

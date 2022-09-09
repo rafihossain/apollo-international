@@ -1,4 +1,9 @@
 @extends('frontend.layouts.app')
+
+@section('title',html_entity_decode($blogCategory->meta_title))
+@section('keywords', $blogCategory->meta_keywords)
+@section('description', $blogCategory->meta_description)
+
 @section('content')
 
 <!-- <style>
@@ -36,6 +41,7 @@
                         <div class="blog-one__single wow fadeInUp" data-wow-delay="400ms">
                             <div class="blog-one__img-box">
                                 <div class="blog-one__img">
+                                    
                                     <img src="{{ asset($blog->blog_image) }}" alt="">
                                     <a href="{{ route('frontend.details-blog', ['slug'=> $blog->blog_slug ]) }}">
                                         <span class="blog-one__plus"></span>

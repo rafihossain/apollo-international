@@ -8,50 +8,52 @@
                         <div class="col-xl-3 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="100ms">
                             <div class="footer-widget__column footer-widget__about">
                                 <div class="footer-widget__about-logo">
-                                    <a href="index.html"><img src="{{ asset('frontend/assets/images/resources/logo.png') }}" alt=""></a>
+                                      @php
+           //$baseUrl = url('/');
+           $baseUrl = $_SERVER['HTTP_HOST'];
+        @endphp
+                                    @if($baseUrl == "apollointl.com.au" || $baseUrl == "www.apollointl.com.au")
+                                    <a href="{{ url('/home') }}"><img src="{{ asset('admin/image/global_settings')}}/{{$global_settings[1]->settings_value}}" alt=""></a>
+                                     @else
+                                     <a href="{{ url('/home') }}"><img src="{{ asset('frontend/assets/images/resources/BD-logo-white.png')}}" alt=""></a>
+                                     @endif
                                 </div>
-                                <p class="footer-widget__about-text">Apollo International has been helping students achieve their dreams of studying abroad for over 10 years...</p>
+                                <p class="footer-widget__about-text">{!! strip_tags($global_settings[2]->settings_value) !!}</p>
                                 <div class="footer-widget__about-social-list">
-                                   
-                                    <a  target="_blank" href="https://www.facebook.com/apollointl.AU/" class="clr-fb"><i class="fab fa-facebook"></i></a>
-                                    <a  target="_blank" href="https://www.linkedin.com/company/apollo-international-australia/" class="clr-dri"><i class="fab fa-linkedin"></i></a>
-                                    <a  target="_blank" href="https://www.instagram.com/apollo_international_aus/" class="clr-ins"><i class="fab fa-instagram"></i></a>
+                                    <a target="_blank" href="{{$contact->facebook}}" class="clr-fb"><i class="fab fa-facebook"></i></a>
+                                    <a target="_blank" href="{{$contact->linkedin}}" class="clr-dri"><i class="fab fa-linkedin"></i></a>
+                                    <a target="_blank" href="{{$contact->instagram}}" class="clr-ins"><i class="fab fa-instagram"></i></a>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xl-2 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="200ms">
+                        <div class="col-xl-3 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="200ms">
                             <div class="footer-widget__column footer-widget__explore clearfix">
                                 <h3 class="footer-widget__title">Our Services</h3>
-                                <ul class="footer-widget__explore-list list-unstyled"> 
-
-                                    <li><a href="{{ url('/service/category/student-services') }}"> Student services</a></li>
-                                    <li><a href="{{ url('/service/category/visa-migration-services') }}">Visa & Migration Services</a></li>
-                                    <li><a href="{{ url('/service/category/study-to-migrate') }}">Study to Migrate</a></li>
-                                    <li><a href="{{ url('/service/category/scholarships') }}">Scholarships</a></li>  
-                                </ul>
-                                 <h3 class="footer-widget__title">Quick Links </h3>
-                                <ul class="footer-widget__explore-list list-unstyled">  
-                                    <li><a href="{{ url('/about') }}"> About Us</a></li>
-                                    <li><a href="{{ url('/contact') }}">Contact Us</a></li>
-                                    <li><a href="{{ url('/testmonial') }}">Testmonial</a></li>
-                                    <li><a href="{{ url('/faq') }}">Faq</a></li> 
-                                </ul>
-
-
+                                {!!$global_settings[3]->settings_value!!} 
+                                
                             </div>
                         </div>
-                        <div class="col-xl-3 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="400ms">
+                        <div class="col-xl-2 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="400ms">
+                            
                             <div class="footer-widget__column footer-widget__contact">
-                                <h3 class="footer-widget__title">Contact</h3>
-                                <p class="footer-widget__contact-text">Suite 1404, Level 14, 97-99 Bathurst Street, Sydney, NSW 2000</p>
+                                <h3 class="footer-widget__title"><a href="{{ url('/contact') }}" class="text-light"> Our Locations </a></h3>
+                               
                                 <div class="footer-widget__contact-info">
-                                    <p>
-                                        <a href="tel:92-666-888-0000" class="footer-widget__contact-phone">(02) 7922 3848</a>
-                                        <a href="mailto:needhelp@company.com"
-                                            class="footer-widget__contact-mail">sydney@apollointl.com.au</a>
-                                    </p>
+                                    <ul>
+                                        <li> <a href="{{ url('/contact') }}">Australia</a></li>
+                                        <li><a href="{{ url('/contact') }}">Bangladesh </a></li>
+                                        <li><a href="{{ url('/contact') }}">China </a></li>
+                                        <li><a href="{{ url('/contact') }}">Fiji  </a></li>
+                                        <li><a href="{{ url('/contact') }}">India </a></li>
+                                        <li><a href="{{ url('/contact') }}">Malaysia </a></li>
+                                        <li><a href="{{ url('/contact') }}">Nepal </a></li>
+                                        <li><a href="{{ url('/contact') }}">Pakistan </a> </li>
+                                        <li><a href="{{ url('/contact') }}">Srilanka </a> </li> 
+                                         
+                                    </ul>
                                 </div>
                             </div>
+                
                         </div>
                         <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="400ms">
                             <div class="footer-widget__column footer-widget__newsletter">
@@ -80,17 +82,12 @@
                     <div class="row">
                         <div class="col-xl-12">
                             <div class="site-footer-bottom__inner">
-                                <p> 
-                                    <a href="#">Australia |</a>
-                                    <a href="#">Bangladesh |</a>
-                                    <a href="#">India |</a>
-                                    <a href="#">Nepal |</a>
-                                    <a href="#">Srilanka |</a>
-                                    <a href="#">Malaysia |</a>
-                                    <a href="#">China |</a>
-                                    <a href="#">Pakistan</a> 
-                                </p>
-                                <p class="site-footer-bottom__copy-right">© Copyright 2022 by <a href="javascript:;">Apollo International</a></p> 
+                              <div class="privacy_polacy"> {!!$global_settings[4]->settings_value!!} </div>  
+                              @if($baseUrl == "apollointl.com.bd" || $baseUrl == "www.apollointl.com.bd")
+                              <div class="privacy_polacy mb-2"> <a href="{{ route('frontend.blog') }}">Blogs</a> <a href="{{ url('/contact') }}">Contact Us</a> </div>
+                       
+                            @endif
+                                <p class="site-footer-bottom__copy-right">© Copyright 2022 by <a href="javascript:;"> Apollo International </a></p> 
                             </div>
                         </div>
                     </div>
@@ -110,8 +107,7 @@
             <span class="mobile-nav__close mobile-nav__toggler"></span>
 
             <div class="logo-box">
-                <a href="index.html" aria-label="logo image"><img src="{{ asset('frontend/assets/images/resources/logo.png') }}" width="155"
-                        alt="" /></a>
+                <a href="{{ url('/home') }}"><img src="{{ asset('admin/image/global_settings')}}/{{$global_settings[1]->settings_value}}" width="155" alt=""></a>
             </div>
             <!-- /.logo-box -->
             <div class="mobile-nav__container"></div>
@@ -120,7 +116,7 @@
             <ul class="mobile-nav__contact list-unstyled">
                 <li>
                     <i class="fa fa-envelope"></i>
-                    <a href="mailto:needhelp@packageName__.com"> info@apollointl.com.au </a>
+                    <a href="mailto:info@apollointl.com.au"> info@apollointl.com.au </a>
                 </li>
                 <li>
                     <i class="fa fa-phone-alt"></i>
@@ -143,12 +139,16 @@
     <!-- /.mobile-nav__wrapper -->
 
  
-
+    <a href="{{ url('/booking') }}" class="bookafreeschatbtn">Book An Appointment</a>
     <a href="#" data-target="html" class="scroll-to-target scroll-to-top"><i class="fa fa-angle-up"></i></a>
 
-
-    <script src="{{ asset('frontend/assets/vendors/jquery/jquery-3.5.1.min.js') }}"></script>
-    <script src="{{ asset('frontend/assets/vendors/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'bn,en,es,ar,hi,fr,pt,ja,nl,ru,tr,ta,sv,ne,si,ms,zh-CN,ur,fj,chi', layout: google.translate.TranslateElement.InlineLayout.SIMPLE, autoDisplay: false}, 'google_translate_element');
+    }
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    
     <script src="{{ asset('frontend/assets/vendors/jarallax/jarallax.min.js') }}"></script>
     <script src="{{ asset('frontend/assets/vendors/jquery-ajaxchimp/jquery.ajaxchimp.min.js') }}"></script>
     <script src="{{ asset('frontend/assets/vendors/jquery-appear/jquery.appear.min.js') }}"></script>
@@ -173,7 +173,7 @@
     <script src="{{ asset('frontend/assets/vendors/timepicker/timePicker.js') }}"></script>
 
 
-    <script src="http://maps.google.com/maps/api/js?key=AIzaSyATY4Rxc8jNvDpsK8ZetC7JyN4PFVYGCGM"></script>
+    <!--<script src="http://maps.google.com/maps/api/js?key=AIzaSyATY4Rxc8jNvDpsK8ZetC7JyN4PFVYGCGM"></script>-->
 
     <!-- js validation -->
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
@@ -219,17 +219,47 @@
         });
     </script> 
     
-    <!-- Start of ChatBot (www.chatbot.com) code -->
-    <script type="text/javascript">
-        window.__be = window.__be || {};
-        window.__be.id = "62e527a2e1ec0500078a96a5";
-        (function() {
-            var be = document.createElement('script'); be.type = 'text/javascript'; be.async = true;
-            be.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'cdn.chatbot.com/widget/plugin.js';
-            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(be, s);
-        })();
+ 
+@if($baseUrl == "apollointl.com.au" || $baseUrl == "www.apollointl.com.au")
+
+  <!-- Start of ChatBot (www.chatbot.com) code -->
+<script type="text/javascript">
+    window.__be = window.__be || {};
+    window.__be.id = "62e527a2e1ec0500078a96a5";
+    (function() {
+        var be = document.createElement('script'); be.type = 'text/javascript'; be.async = true;
+        be.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'cdn.chatbot.com/widget/plugin.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(be, s);
+    })();
+</script>
+<!-- End of ChatBot code -->
+ @else
+<!-- Start of ChatBot (www.chatbot.com) code -->
+<script type="text/javascript">
+    window.__be = window.__be || {};
+    window.__be.id = "6315d9c83083570007a98ec5";
+    (function() {
+        var be = document.createElement('script'); be.type = 'text/javascript'; be.async = true;
+        be.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'cdn.chatbot.com/widget/plugin.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(be, s);
+    })();
+</script>
+<!-- End of ChatBot code -->
+@endif
+     
+    <script>
+        $(function(){
+            $('#selectCountry').on('change', function (){
+                let result = $(this).val();
+
+                if(result == 1){
+                    window.location.href = "https://apollointl.com.au/";
+                }else{
+                    window.location.href = "https://apollointl.com.bd/";
+                }
+            });
+        });
     </script>
-    <!-- End of ChatBot code -->
 
 </body>
 

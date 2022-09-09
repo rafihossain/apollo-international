@@ -1,12 +1,22 @@
 @extends('frontend.layouts.app')
-@section('title', $service->meta_title)
+
+@section('title',html_entity_decode($service->meta_title))
+@section('keywords', $service->meta_keyword)
 @section('description', $service->meta_description)
-@section('keywords', $service->meta_keywords)
+
+@php
+    $image = explode('/',$service->service_image);
+    $header_image = explode('/',$service->service_header_image)
+@endphp
 
 @section('content')
 
 <!--Page Header Start-->
-<section class="page-header" style="background-image: url({{ asset($service->service_image) }})">
+@if(!empty($service->service_header_image))
+<section class="page-header" style="background-image: url({{ asset('admin/image/service/'.$header_image[4]) }})">
+@else
+ <section class="page-header" style="background-image: url({{ asset('admin/image/service/'.$image[4]) }})">
+@endif    
     <div class="page-header-shape-1"></div>
     <div class="page-header-shape-2"></div>
     <div class="container">
@@ -17,20 +27,18 @@
 </section>
 <!--Page Header End-->
 
-<!--Blog Details Start-->
+<!--Service Details Start-->
 <section class="blog-details">
     <div class="container">
         <div class="row">
             <div class="col-xl-8 col-lg-7">
                 <div class="blgo-details__left">
                     <div class="blog-details__img">
-                        <img src="{{ asset($service->service_image) }}" alt="">
+                        <img src="{{  asset('admin/image/service/'.$image[4]) }}" alt="">
                     </div>
                     <div class="blog-details__content">
                         <p class="blog-details__text-1">{!!$service->service_description!!}</p>
-
                     </div>
-
                 </div>
             </div>
             <div class="col-xl-4 col-lg-5">
@@ -40,7 +48,7 @@
 
                         <div class="p-3">
                             <h5>Book a FREE Consultation Today!</h5>
-                            <p>Schedule an appointment with one of our expert counsellors and get up-to-date infoformation of your next admission and visa enquiries</p>
+                            <p>Schedule an appointment with one of our expert counsellors and get up-to-date Information of your next admission and visa enquiries</p>
 
                             <a href="{{ url('/booking') }}" class="thm-btn">Book an Appoinment</a>
                         </div>
@@ -56,113 +64,58 @@
         </div>
     </div>
 </section>
-<!--Blog Details End-->
-<!--Brand Two-->
-<section class="brand-one">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="section-title text-left">
-                    <h2 class="section-title__title">Professional Year Partners</h2>
-                </div>
-                <div class="thm-swiper__slider swiper-container" data-swiper-options='{"spaceBetween": 100, "slidesPerView": 5, "autoplay": { "delay": 5000 }, "breakpoints": {
-                        "0": {
-                            "spaceBetween": 30,
-                            "slidesPerView": 2
-                        },
-                        "375": {
-                            "spaceBetween": 30,
-                            "slidesPerView": 2
-                        },
-                        "575": {
-                            "spaceBetween": 30,
-                            "slidesPerView": 2
-                        },
-                        "767": {
-                            "spaceBetween": 50,
-                            "slidesPerView": 2
-                        },
-                        "991": {
-                            "spaceBetween": 50,
-                            "slidesPerView": 3
-                        },
-                        "1199": {
-                            "spaceBetween": 100,
-                            "slidesPerView": 3
-                        }
-                    }}'>
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide">
-                            <img src="{{ asset('frontend/assets/images/brand/arc.png') }}" alt="">
-                        </div><!-- /.swiper-slide -->
-                        <div class="swiper-slide">
-                            <img src="{{ asset('frontend/assets/images/brand/atmc.gif') }}" alt="">
-                        </div><!-- /.swiper-slide -->
-                        <div class="swiper-slide">
-                            <img src="{{ asset('frontend/assets/images/brand/navitas.gif') }}" alt="">
-                        </div><!-- /.swiper-slide -->
-                        <div class="swiper-slide">
-                            <img src="{{ asset('frontend/assets/images/brand/Untitled-design-8.png') }}" alt="">
-                        </div><!-- /.swiper-slide -->
-                        <div class="swiper-slide">
-                            <img src="{{ asset('frontend/assets/images/brand/Untitled-design-92.png') }}" alt="">
-                        </div><!-- /.swiper-slide -->
+<!--Service Details End-->
 
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="section-title text-left">
-                    <h2 class="section-title__title">Health Insurance</h2>
-                </div>
-                <div class="thm-swiper__slider swiper-container" data-swiper-options='{"spaceBetween": 100, "slidesPerView": 5, "autoplay": { "delay": 5000 }, "breakpoints": {
-                        "0": {
-                            "spaceBetween": 30,
-                            "slidesPerView": 2
-                        },
-                        "375": {
-                            "spaceBetween": 30,
-                            "slidesPerView": 2
-                        },
-                        "575": {
-                            "spaceBetween": 30,
-                            "slidesPerView": 2
-                        },
-                        "767": {
-                            "spaceBetween": 50,
-                            "slidesPerView": 2
-                        },
-                        "991": {
-                            "spaceBetween": 50,
-                            "slidesPerView": 3
-                        },
-                        "1199": {
-                            "spaceBetween": 100,
-                            "slidesPerView": 3
-                        }
-                    }}'>
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide">
-                            <img src="{{ asset('frontend/assets/images/brand/1.png') }}" alt="">
-                        </div><!-- /.swiper-slide -->
-                        <div class="swiper-slide">
-                            <img src="{{ asset('frontend/assets/images/brand/2.png') }}" alt="">
-                        </div><!-- /.swiper-slide -->
-                        <div class="swiper-slide">
-                            <img src="{{ asset('frontend/assets/images/brand/3.png') }}" alt="">
-                        </div><!-- /.swiper-slide -->
-                        <div class="swiper-slide">
-                            <img src="{{ asset('frontend/assets/images/brand/4.png') }}" alt="">
-                        </div><!-- /.swiper-slide -->
-                        <div class="swiper-slide">
-                            <img src="{{ asset('frontend/assets/images/brand/5.png') }}" alt="">
-                        </div><!-- /.swiper-slide -->
+@for ($i = 0; $i < count($sectionType); $i++)
+    @switch ($sectionType[$i])
+        @case ("banner")
+            <x-home.home-banner-section :bannerlist="$bannerlist"/>
+            @break
+        @case ("occupation_search")
+             <x-home.home-calculation /> 
+            @break
+        @case ("home_aboutus")
+            <x-home.home-about-us :homeAboutUs="$homeAboutUs"/>
+            @break
+        @case ("skills")
+            <x-home.home-skill :skill="$skill"/>
+            @break
+        @case ("home_faq")
+            <x-home.home-faq :faq="$faq" :faqs="$faqs" />
+            @break
+        @case ("home_testimonial")
+            <x-home.home-testimonial :testimonial="$testimonial" :testimonials="$testimonials" />
+            @break
+        @case ("home_service")
+            <x-home.home-service :service="$service" :serviceSections="$serviceSections" />
+            @break
+        @case ("home_blog")
+            <x-home.home-blog :blog="$blog" :blogSections="$blogSections" />
+            @break
+        @case ("home_partner")
+            <x-home.home-partner :partners="$partners" />
+            @break
+        @case ("home_current_scholarship")
+            <x-home.home-scholarship :scholarship="$scholarship" />
+            @break
+        @case ("about_the_company")
+            <x-about.about-company :aboutCompany="$aboutCompany" />
+            @break
+        @case ("about_director_message")
+            <x-about.director_messages :directorMessage="$directorMessage"/>
+            @break
+        @case ("about_our_team")
+            <x-about.mission-vision :aboutVision="$aboutVision" />
+            @break
+        @case ("about_vision")
+            <x-about.our-leaders :teamSections="$teamSections" :team="$team" />
+            @break
 
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!--Brand Two End-->
+        @default
+            {{ "wrong" }}
+    @endswitch
+@endfor
+
+
+
 @endsection

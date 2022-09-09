@@ -22,6 +22,25 @@
                 <strong class="text-danger">{{ $message }}</strong>
                 @enderror
             </div>
+            
+            <div class="form-group mb-2">
+                <label>Publish Country</label>
+                <select class="form-control" name="country">
+                    <option value="">Select Country</option>
+                    <option value="0">All</option>
+                    <option value="1">Australia</option>
+                    <option value="2">Bangladesh</option>
+                    <option value="3">Nepal</option>
+                    <option value="4">Malaysia</option>
+                    <option value="5">India</option>
+                    <option value="6">SriLanka</option>
+                    <option value="7">Pakistan</option>
+                    <option value="8">China</option>
+                </select>
+                @error('country')
+                <strong class="text-danger">{{ $message }}</strong>
+                @enderror
+            </div>
 
             <div class="text-center">
                 <button class="btn btn-primary" type="submit"> Add Faq </button>

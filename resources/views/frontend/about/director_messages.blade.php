@@ -1,5 +1,9 @@
 @extends('frontend.layouts.app')
 
+@section('title', $metaTitle)
+@section('keywords', $metaKeyword)
+@section('description', $metaDescription)
+
 @section('content') 
 
 <!--Page Header Start-->
@@ -49,9 +53,8 @@
                 <x-home.home-partner :partners="$partners" />
                 @break
             @case ("home_current_scholarship")
-                <x-home.home-scholarship :scholarship="$scholarship->current_scholarship_image" />
+                <x-home.home-scholarship :scholarship="$scholarship" />
                 @break
-
             @case ("about_the_company")
                 <x-about.about-company :aboutCompany="$aboutCompany" />
                 @break

@@ -1,9 +1,13 @@
 @extends('frontend.layouts.app')
 
+@section('title', $metaTitle)
+@section('keywords', $metaKeyword)
+@section('description', $metaDescription)
+
 @section('content') 
 
 <!--Page Header Start-->
-<section class="page-header" style="background-image: url({{ asset('frontend/assets/images/backgrounds/group-of-multiethnic-students-on-graduation-day.jpg') }});">
+<section class="page-header" style="background-image: url({{ asset('frontend/assets/images/header/About-us2.jpg') }});">
     <div class="page-header-shape-1"></div>
     <div class="page-header-shape-2"></div>
     <div class="container">
@@ -50,9 +54,8 @@
                 <x-home.home-partner :partners="$partners" />
                 @break
             @case ("home_current_scholarship")
-                <x-home.home-scholarship :scholarship="$scholarship->current_scholarship_image" />
+                <x-home.home-scholarship :scholarship="$scholarship" />
                 @break
-
             @case ("about_the_company")
                 <x-about.about-company :aboutCompany="$aboutCompany" />
                 @break

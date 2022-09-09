@@ -3,7 +3,7 @@
 @section('content')
 <div class="card">
     <div class="card-body">
-        <form id="formService" action="{{route('backend.save-service')}}" method="POST" enctype="multipart/form-data">
+        <form id="addService" action="{{route('backend.save-service')}}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="form-group mb-2">
                 <label>Service Title</label>
@@ -37,6 +37,21 @@
                 @enderror
             </div>
             <div class="form-group mb-2">
+				<label>Service Category</label>
+                
+                <select name="service_category_id" class="form-control @error('service_category_id') is-invalid @enderror" id="">
+                    @foreach($serviceCategories as $category)
+                        <option value="{{ $category->id }}">
+                            {{ $category->category_name }}
+                        </option>
+                    @endforeach
+                </select>
+
+                @error('service_category_id')
+                    <strong class="text-danger">{{ $message }}</strong>
+                @enderror
+			</div>
+            <div class="form-group mb-2">
                 <label>Service Description</label>
                 <div id="editor" style="height: 300px;"></div>
                 <textarea name="service_description" style="display:none" id="hiddenArea"></textarea>
@@ -45,6 +60,15 @@
                 <strong class="text-danger">{{ $message }}</strong>
                 @enderror
             </div>
+            
+            <div class="form-group mb-2">
+                <label>Service Header Top Image</label>
+                <input type="file" class="imageupload" name="service_header_image">
+                @error('service_header_image')
+                <strong class="text-danger">{{ $message }}</strong>
+                @enderror
+            </div>
+            
             <div class="form-group mb-2">
                 <label>Service Image</label>
                 <input type="file" class="imageupload" name="service_image">
@@ -66,7 +90,7 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        $("#formService").on("submit", function() {
+        $("#addService").on("submit", function() {
             $("#hiddenArea").val($(".ql-editor").html());
         })
     });

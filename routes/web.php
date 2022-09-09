@@ -44,16 +44,40 @@ Route::group(['namespace' => 'Frontend', 'as' => 'frontend.'], function () {
     Route::get('contact', ['as' => "contact", 'uses' => "FrontendController@contact"]);
     Route::post('contact/save', ['as' => "contact_save", 'uses' => "FrontendController@contact_save"]);
     
+    // Api integration
+    Route::post('api_check', ['as' => "api_check", 'uses' => "ApiController@api_check"]);
+    Route::get('get_contacts', ['as' => "get_contacts", 'uses' => "ApiController@get_contacts"]);
+    
+    Route::post('book_api_check', ['as' => "book_api_check", 'uses' => "ApiController@book_api_check"]);
+    Route::get('get_bookings', ['as' => "get_bookings", 'uses' => "ApiController@get_bookings"]);
+    
     // booking
     Route::get('booking', ['as' => "booking", 'uses' => "FrontendController@booking"]);
-    Route::get('booking_success', ['as' => "booking_success", 'uses' => "FrontendController@booking_success"]);
+    Route::post('booking/success', ['as' => "update_booking", 'uses' => "FrontendController@updateBooking"]);
+
+    Route::get('booking_success/{slug}', ['as' => "booking_success", 'uses' => "FrontendController@booking_success"]);
+    
+    
     Route::get('faq', ['as' => "faq", 'uses' => "FrontendController@faq"]);
-    Route::get('testmonial', ['as' => "testmonial", 'uses' => "FrontendController@testmonial"]);
+    Route::get('testimonial', ['as' => "testimonial", 'uses' => "FrontendController@testmonial"]);
     
     Route::get('about', ['as' => "about", 'uses' => "FrontendController@about"]);
     Route::get('director/messages', ['as' => "director_messages", 'uses' => "FrontendController@director_messages"]);
     Route::get('mission/vision', ['as' => "mission_vision", 'uses' => "FrontendController@mission_vision"]);
     Route::get('our/leaders', ['as' => "our_leaders", 'uses' => "FrontendController@our_leaders"]);
+    
+    Route::get('career', ['as' => "carrer", 'uses' => "FrontendController@carrer"]);
+    Route::get('franchise', ['as' => "carrer", 'uses' => "FrontendController@franchise"]);
+    
+    //partner
+    Route::get('partner', ['as' => "partner", 'uses' => "FrontendController@partner"]);
+    
+    //studyabroad
+    Route::get('studyabroad', ['as' => "studyabroad", 'uses' => "FrontendController@studyabroad"]);
+    Route::get('studyabroad/{slug}', ['as' => "details-studyabroad", 'uses' => "FrontendController@studyabroadDetails"]);
+    
+    //scholarship
+    Route::get('scholarship', ['as' => "scholarship", 'uses' => "FrontendController@scholarship"]);
     
     
 
@@ -124,6 +148,13 @@ Route::group(['namespace' => 'Backend', 'prefix' => 'admin', 'as' => 'backend.',
     Route::get('user/edit/{id}', ['as' => 'user-edit','uses' => 'UserManageController@edit_user']);
     Route::post('user/update', ['as' => 'updateuser','uses' => 'UserManageController@update_user']);
     Route::get('user/delete/{id}', ['as' => 'user-delete','uses' => 'UserManageController@delete_user']);
+    
+    
+    //Current Scholorship Section delete------------------------
+    Route::get('Current_scholarship/delete', ['as' => 'delete_current_image','uses' => 'SectionController@delete_current_image']);
+    
+    //Company image delete--------------------------------------
+    Route::get('company_image/delete', ['as' => 'delete_company_image','uses' => 'SectionController@delete_company_image']);
 
     //Our Team Section--------------------
     Route::get('our-team/list', ['as' => 'our_team','uses' => 'SettingsController@our_team']);
@@ -168,6 +199,22 @@ Route::group(['namespace' => 'Backend', 'prefix' => 'admin', 'as' => 'backend.',
     Route::get('blog/view/{id}', ['as' => 'view-blog','uses' => 'BlogController@viewBlog']);
     Route::get('blog/unpublished/{id}', ['as' => 'unpublished-blog','uses' => 'BlogController@unpublishedBlog']);
     Route::get('blog/published/{id}', ['as' => 'published-blog','uses' => 'BlogController@publishedBlog']);
+    
+    // Study Abroad Section
+    Route::get('studyabroad/add', ['as' => 'add-studyabroad','uses' => 'StudyabroadController@addStudyabroad']);
+    Route::get('studyabroad/list', ['as' => 'manage-studyabroad','uses' => 'StudyabroadController@manageStudyabroad']);
+    Route::post('studyabroad/save', ['as' => 'save-studyabroad','uses' => 'StudyabroadController@saveStudyabroad']);
+    Route::get('studyabroad/edit/{id}', ['as' => 'edit-studyabroad','uses' => 'StudyabroadController@editStudyabroad']);
+    Route::post('studyabroad/update', ['as' => 'update-studyabroad','uses' => 'StudyabroadController@updateStudyabroad']);
+    Route::get('studyabroad/delete/{id}', ['as' => 'delete-studyabroad','uses' => 'StudyabroadController@deleteStudyabroad']);
+    
+    // Scholarship
+    Route::get('scholarship/add', ['as' => 'add-scholarship','uses' => 'ScholarshipController@addScholarship']);
+    Route::get('scholarship/list', ['as' => 'manage-scholarship','uses' => 'ScholarshipController@manageScholarship']);
+    Route::post('scholarship/save', ['as' => 'save-scholarship','uses' => 'ScholarshipController@saveScholarship']);
+    Route::get('scholarship/edit/{id}', ['as' => 'edit-scholarship','uses' => 'ScholarshipController@editScholarship']);
+    Route::post('scholarship/update', ['as' => 'update-scholarship','uses' => 'ScholarshipController@updateScholarship']);
+    Route::get('scholarship/delete/{id}', ['as' => 'delete-scholarship','uses' => 'ScholarshipController@deleteScholarship']);
 
     // Partner Section
     Route::get('partner/add', ['as' => 'add-partner','uses' => 'PartnerController@addPartner']);
@@ -186,7 +233,15 @@ Route::group(['namespace' => 'Backend', 'prefix' => 'admin', 'as' => 'backend.',
     Route::get('testimonial/delete/{id}', ['as' => 'delete-testimonial','uses' => 'TestimonialController@deleteTestimonial']);
     Route::get('testimonial/view/{id}', ['as' => 'view-testimonial','uses' => 'TestimonialController@viewTestimonial']);
 
+    //USer Contact----------------------
+    Route::get('user/contact/list', ['as' => 'user_contact_list','uses' => 'ContactController@contact_list']);
+    Route::post('user/contact/reply', ['as' => 'reply_user_contact','uses' => 'ContactController@reply_user_contact']);
 
+    // Booking
+    Route::get('booking/manage', ['as' => 'booking-manage','uses' => 'BookingController@bookingManage']);
+    Route::get('booking/delete/{id}', ['as' => 'booking-delete','uses' => 'BookingController@bookingDelete']);
+    
+    
     //Setting
 
     // Faq
@@ -205,6 +260,9 @@ Route::group(['namespace' => 'Backend', 'prefix' => 'admin', 'as' => 'backend.',
     Route::get('contact/edit/{id}', ['as' => 'contact_edit','uses' => 'SettingsController@contact_edit']);
     Route::post('contact/update', ['as' => 'contact_update','uses' => 'SettingsController@contact_update']);
 
+   //Contact admin email setting---------------------
+    Route::get('contact/email', ['as' => 'contact_email','uses' => 'SettingsController@contact_email']);
+    Route::post('contact/email/update', ['as' => 'contact_email_update','uses' => 'SettingsController@contact_email_update']);
 
     //Social setting--------------------
     Route::get('setting/social', ['as' => 'social_setting','uses' => 'SettingsController@social_setting']);
@@ -213,6 +271,32 @@ Route::group(['namespace' => 'Backend', 'prefix' => 'admin', 'as' => 'backend.',
     //Profile Setting-------------------
     Route::get('setting/account', ['as' => 'my_account','uses' => 'SettingsController@my_account']);
     Route::post('account/update', ['as' => 'update_my_account','uses' => 'SettingsController@update_my_account']);
+    
+    //Google analytics-------------------
+    Route::get('setting/google/ads', ['as' => 'google_ads','uses' => 'SettingsController@google_ads']);
+    Route::post('setting/google/ads/update', ['as' => 'google_ads_update','uses' => 'SettingsController@google_ads_update']);
+
+    //Facebbok Pixel-------------------
+    Route::get('setting/facebook/pixel', ['as' => 'facebook_pixel','uses' => 'SettingsController@facebook_pixel']);
+    Route::post('setting/facebook/pixel/update', ['as' => 'facebook_pixel_update','uses' => 'SettingsController@facebook_pixel_update']);
+    
+    //Social link settings------------------
+    Route::get('setting/social/link', ['as' => 'social_link','uses' => 'SettingsController@social_link']);
+    Route::post('setting/social/link/update', ['as' => 'social_link_update','uses' => 'SettingsController@social_link_update']);
+    
+    //Others
+    Route::get('setting/other', ['as' => 'edit-other','uses' => 'SettingsController@editOther']);
+    Route::post('setting/other/update', ['as' => 'update-other','uses' => 'SettingsController@updateOther']);
+    
+    //Wizard
+    Route::get('setting/wizard', ['as' => 'edit-wizard','uses' => 'SettingsController@editWizard']);
+    Route::post('setting/wizard/update', ['as' => 'update-wizard','uses' => 'SettingsController@updateWizard']);
+    
+    //Global settings----------
+    Route::get('global/settings/{id}', ['as' => 'global_settings','uses' => 'SettingsController@global_settings']);
+    Route::get('global/settings', ['as' => 'global_settings','uses' => 'SettingsController@global_settings']);
+    Route::post('global/settings/update', ['as' => 'global_settings_update','uses' => 'SettingsController@global_settings_update']);
+    
 
     /*
      *

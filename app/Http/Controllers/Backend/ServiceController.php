@@ -19,7 +19,6 @@ class ServiceController extends Controller
             'meta_keywords' => 'required',
             'meta_description' => 'required',
             'category_name' => 'required',
-            'category_image' => 'required',
         ]);
     }
 
@@ -42,34 +41,18 @@ class ServiceController extends Controller
             'category_slug' => 'required|unique:blog_categories,category_slug|regex:/^[a-z-0-9S*]+$/',
         ]);
     }
-    protected function serviceCategoryImageUpload($request){
-        $categoryImage = $request->file('category_image');
+    protected function categoryBasicInfoUpdate($request, $serviceCategory,$imageurl=""){
+        if($imageurl)
+        {
+          $serviceCategory->category_image=$imageurl; 
+        }
 
-        $image = Image::make($categoryImage);
-        $fileType = $categoryImage->getClientOriginalExtension();
-        $imageName = 'service_category_'.time().'_'.rand(10000, 999999).'.'.$fileType;
-        $directory = 'admin/image/service/category/';
-        $imageUrl = $directory.$imageName;
-        $image->save($imageUrl);
-        
-        $thumbnail = $directory."thumbnail/".$imageName;
-        $image->resize(null, 200, function($constraint) {
-            $constraint->aspectRatio();
-        });
-        $image->save($thumbnail);
-
-        return $thumbnail;
-    }
-    protected function categoryBasicInfoUpdate($request, $serviceCategory, $imageUrl=null){
         $serviceCategory->meta_title = $request->meta_title;
         $serviceCategory->meta_keywords = $request->meta_keywords;
         $serviceCategory->meta_description = $request->meta_description;
         $serviceCategory->category_name = $request->category_name;
         $serviceCategory->category_slug = $request->category_slug;
         $serviceCategory->category_description = $request->category_description;
-        if($serviceCategory){
-            $serviceCategory->category_image = $imageUrl;
-        }
         $serviceCategory->save();
     }
     public function manageCategory(){
@@ -81,12 +64,26 @@ class ServiceController extends Controller
     public function addCategory(){
         return view('backend.service.category.add_category');
     }
+    
+      protected function category_image_upload($request)
+    {
+        $categoryImage = $request->file('category_header_image');
+
+        $image = Image::make($categoryImage);
+        $fileType = $categoryImage->getClientOriginalExtension();
+        $imageName = 'category_header_logo_'.time().'_'.rand(10000, 999999).'.'.$fileType;
+        $directory = 'admin/image/category_image/';
+        $imageUrl = $directory.$imageName;
+        $image->save($imageUrl);
+
+        return $imageUrl;
+    }
+    
     public function saveCategory(Request $request){
         $this->categoryInfoValidate($request);
         $categorySlug = Str::slug($request->category_name);
 
         $slugCheck = ServiceCategory::where('category_slug', 'like', '%'.$categorySlug.'%')->get();
-        // echo "<pre>"; print_r($slugCheck); die();
         
         $slugValue = '';
         if(count($slugCheck) > 0){
@@ -94,7 +91,6 @@ class ServiceController extends Controller
         }else{
             $slugValue = $categorySlug;
         }
-        $imageUrl = $this->serviceCategoryImageUpload($request);
 
         $serviceCategory = new ServiceCategory;
         $serviceCategory->meta_title = $request->meta_title;
@@ -102,8 +98,8 @@ class ServiceController extends Controller
         $serviceCategory->meta_description = $request->meta_description;
         $serviceCategory->category_name = $request->category_name;
         $serviceCategory->category_slug = $slugValue;
-        $serviceCategory->category_image = $imageUrl;
         $serviceCategory->category_description = $request->category_description;
+        $serviceCategory->category_image=$this->category_image_upload($request);
         $serviceCategory->save();
         return redirect()->route('backend.manage-service-category')->with('success', 'Category has been added successfully !!');
     }
@@ -116,7 +112,8 @@ class ServiceController extends Controller
     }
     public function updateCategory(Request $request){
 
-        $categoryImage = $request->file('category_image');
+        $categoryImage = $request->file('category_header_image');
+
         $serviceCategory = ServiceCategory::find($request->id);
 
         if($serviceCategory->category_slug == $request->category_slug){
@@ -125,15 +122,18 @@ class ServiceController extends Controller
             $this->categoryNewInfoValidateUpdate($request);
         }
         
-        if($categoryImage){
+        if($categoryImage)
+        {
             if (File::exists($serviceCategory->category_image)) {
                 unlink($serviceCategory->category_image);
             }
-            $imageUrl = $this->serviceCategoryImageUpload($request);
-            $this->categoryBasicInfoUpdate($request, $serviceCategory, $imageUrl);
-        }else{
-            $this->categoryBasicInfoUpdate($request, $serviceCategory);
-        }
+            $imageurl=$this->category_image_upload($request);
+            $this->categoryBasicInfoUpdate($request, $serviceCategory,$imageurl);
+         }
+         else
+         {
+            $this->categoryBasicInfoUpdate($request, $serviceCategory); 
+         }
 
         return redirect()->route('backend.manage-service-category')->with('success', 'Category has been update successfully !!');
     }
@@ -152,6 +152,8 @@ class ServiceController extends Controller
             'meta_description' => 'required',
             'service_description' => 'required',
             'service_image' => 'required',
+            'service_category_id' => 'required',
+            //'service_image' => 'required|dimensions:width=1536,min_height=1024'
         ]);
     }
     protected function serviceInfoValidateUpdate($request){
@@ -161,7 +163,9 @@ class ServiceController extends Controller
             'meta_title' => 'required',
             'meta_keyword' => 'required',
             'meta_description' => 'required',
-            'service_description' => 'required'
+            'service_description' => 'required',
+            'service_category_id' => 'required',
+            //'service_image' => 'required|dimensions:width=1536,min_height=1024'
         ]);
     }
     protected function serviceNewInfoValidateUpdate($request){
@@ -171,7 +175,9 @@ class ServiceController extends Controller
             'meta_title' => 'required',
             'meta_keyword' => 'required',
             'meta_description' => 'required',
-            'service_description' => 'required'
+            'service_description' => 'required',
+            'service_category_id' => 'required',
+            //'service_image' => 'required|dimensions:width=1536,min_height=1024'
         ]);
     }
     protected function serviceImageUpload($request){
@@ -185,14 +191,37 @@ class ServiceController extends Controller
         $image->save($imageUrl);
         
         $thumbnail = $directory."thumbnail/".$imageName;
-        $image->resize(null, 200, function($constraint) {
-            $constraint->aspectRatio();
-        });
+        // $image->resize(null, 200, function($constraint) {
+        //     $constraint->aspectRatio();
+        // });
+        $image->resize(370, 426);
         $image->save($thumbnail);
 
         return $thumbnail;
     }
-    protected function serviceBasicInfoSave($request, $imageUrl){
+    
+    protected function serviceImageUpload_new($request){
+
+        $serviceImage = $request->file('service_header_image');
+
+        $image = Image::make($serviceImage);
+        $fileType = $serviceImage->getClientOriginalExtension();
+        $imageName = 'service_header_logo_'.time().'_'.rand(10000, 999999).'.'.$fileType;
+        $directory = 'admin/image/service/';
+        $imageUrl = $directory.$imageName;
+        $image->save($imageUrl);
+        
+        $thumbnail = $directory."thumbnail/".$imageName;
+        // $image->resize(null, 200, function($constraint) {
+        //     $constraint->aspectRatio();
+        // });
+        $image->resize(370, 426);
+        $image->save($thumbnail);
+
+        return $thumbnail;
+    }
+    
+    protected function serviceBasicInfoSave($request, $imageUrl,$header_imageUrl){
         $serviceSlug = Str::slug($request->service_title);
 
         $slugCheck = Service::where('service_slug', 'like', '%'.$serviceSlug.'%')->get();
@@ -213,6 +242,7 @@ class ServiceController extends Controller
         $service->meta_description = $request->meta_description;
         $service->service_description = $request->service_description;
         $service->service_image = $imageUrl;
+        $service->service_header_image = $header_imageUrl;
         if(isset($request->service_status)){
             $service->service_status = 1;
         }else{
@@ -220,7 +250,8 @@ class ServiceController extends Controller
         }
         $service->save();
     }
-    protected function serviceBasicInfoUpdate($request, $service, $imageUrl=null){
+    protected function serviceBasicInfoUpdate($request, $service, $imageUrl=null, $header_imageUrl=""){
+
         $service->service_title = $request->service_title;
         $service->service_slug = $request->service_slug;
         $service->service_category_id = $request->service_category_id;
@@ -231,11 +262,15 @@ class ServiceController extends Controller
         if($imageUrl){
             $service->service_image = $imageUrl;
         }
+        if($header_imageUrl){
+            $service->service_header_image = $header_imageUrl;
+        }
         if(isset($request->service_status)){
             $service->service_status = 1;
         }else{
             $service->service_status = 2;
         }
+        
         $service->save();
     }
     public function manageService(){
@@ -245,12 +280,16 @@ class ServiceController extends Controller
         ]);
     }
     public function addService(){
-        return view('backend.service.add_service');
+        $serviceCategories = ServiceCategory::all();
+        return view('backend.service.add_service', [
+            'serviceCategories'=>$serviceCategories
+        ]);
     }
     public function saveService(Request $request){
         $this->serviceInfoValidateSave($request);
         $imageUrl = $this->serviceImageUpload($request);
-        $this->serviceBasicInfoSave($request, $imageUrl);
+        $header_imageUrl = $this->serviceImageUpload_new($request);
+        $this->serviceBasicInfoSave($request,$imageUrl,$header_imageUrl);
 
         return redirect()->route('backend.manage-service')->with('success', 'Service has been added successfully !!');
     }
@@ -280,15 +319,38 @@ class ServiceController extends Controller
         }
 
         $serviceImage = $request->file('service_image');
+        $service_header_image = $request->file('service_header_image');
         $service = Service::find($request->id);
-
+        $service_new_image=explode('/',$service->service_image);
+        $service_header_image_new=explode('/',$service->service_header_image);
+        
+    
         if($serviceImage){
             if (File::exists($service->service_image)) {
                 unlink($service->service_image);
             }
+            if (File::exists('admin/image/section/service/' . $service_new_image[4])) {
+                unlink('admin/image/section/service/' . $service_new_image[4]);
+            }
             $imageUrl = $this->serviceImageUpload($request);
-            $this->serviceBasicInfoUpdate($request, $service, $imageUrl);
-        }else{
+            $this->serviceBasicInfoUpdate($request, $service, $imageUrl, $header_imageUrl="");
+        }
+        if($service_header_image)
+        {
+            if(!empty($service_header_image_new[0]))
+            {
+                if (File::exists($service->service_header_image)) {
+                    unlink($service->service_header_image);
+                }
+                if (File::exists('admin/image/section/service/'.$service_header_image_new[4])) {
+                    unlink('admin/image/section/service/'.$service_header_image_new[4]);
+                }
+            }
+            $header_imageUrl = $this->serviceImageUpload_new($request);
+            $this->serviceBasicInfoUpdate($request, $service,$imageUrl="",$header_imageUrl);
+        }
+        else
+        {
             $this->serviceBasicInfoUpdate($request, $service);
         }
         return redirect()->route('backend.manage-service')->with('success', 'Service has been updated successfully !!');

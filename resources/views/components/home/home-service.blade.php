@@ -16,11 +16,11 @@
                         <img class="lazy" data-original="{{ asset($serviceSection->service_image) }}" alt="" width="307" height="354">
                         <div class="portfolio-one__experience">
                             <div class="portfolio-one__fimlor">
-                                <p class="portfolio-one__fimlor-title"><a href="#">{{ $serviceSection->service_title }}</a></p>
+                                <p class="portfolio-one__fimlor-title"><a href="{{ route('frontend.details-service', ['slug' => $serviceSection->service_slug]) }}">{{ $serviceSection->service_title }}</a></p>
                             </div>
                         </div>
                         <div class="portfolio-one__arrow">
-                            <a href="#"><span class="icon-right-arrow"></span></a>
+                            <a href="{{ route('frontend.details-service', ['slug' => $serviceSection->service_slug]) }}"><span class="icon-right-arrow"></span></a>
                         </div>
                     </div>
                 </div>

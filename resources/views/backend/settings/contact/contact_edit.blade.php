@@ -2,7 +2,7 @@
 @section('title', 'Edit Contact')
 @section('content') 
 
-<form method="post" id="contactusform" action="{{route('backend.contact_update')}}" enctype="multipart/form-data">
+<form method="post" id="editContact" action="{{route('backend.contact_update')}}" enctype="multipart/form-data">
 	@csrf 
 	<input type="hidden" name="contact_id" value="{{$contact['id']}}">
  	<div class="contactlist">	
@@ -16,6 +16,13 @@
 							@enderror
 						</div>
 						<div class="form-group mb-2">
+							<label>Office</label>
+							<input type="text" class="form-control" name="office" value="{{$contact['office']}}">
+							@error('office')
+							<strong class="text-danger">{{ $message }}</strong>
+							@enderror
+						</div>
+						<div class="form-group mb-2">
 							<label>Address</label>
 							<textarea class="form-control" name="address">{{$contact['address']}}</textarea>
 							@error('address')
@@ -24,8 +31,15 @@
 						</div>
 						<div class="form-group mb-2">
 							<label>Phone</label>
-							<input type="tel" class="form-control" name="phone" name="phone" value="{{$contact['phone']}}">
+							<input type="tel" class="form-control" name="phone"  value="{{$contact['phone']}}">
 							@error('phone')
+							<strong class="text-danger">{{ $message }}</strong>
+							@enderror
+						</div>
+							<div class="form-group mb-2">
+							<label>Mobile</label>
+							<input type="tel" class="form-control" name="mobile" value="{{$contact['mobile']}}">
+							@error('mobile')
 							<strong class="text-danger">{{ $message }}</strong>
 							@enderror
 						</div>

@@ -36,6 +36,9 @@
                             <option value="about_director_message">About Director Message</option>
                             <option value="about_our_team">About Our Team</option>
                             <option value="about_vision">About Vision</option>
+                            <option value="carrer_section">Carrer</option>
+                            <option value="franchise_section">Franchise Options</option>
+                            <option value="scholarship_section">Scholarship</option>
                         </select>
                     </div>
                 </div>
@@ -306,8 +309,8 @@
                     </div>
                 </div>
                 <div class="contentsection"></div>
-                <div class="addpagesection"> <i class="mdi mdi-plus"></i> </div>
             </div>
+         <div class="addpagesection"> <i class="mdi mdi-plus"></i> </div>
         </div>
     </div>
     <!-- home Partner End -->
@@ -473,6 +476,64 @@
     </div>
     <!-- About Vision End -->
 
+    <!-- About Vision Start -->
+    <div id="carrer_section">
+        <h3>Carrer</h3>
+        <div class="contentslider">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-group mb-2">
+                        <label>Carrer Description</label>
+                        <textarea name="carrer_description" id="editor5" class="form-control"></textarea>
+                        @error('carrer_description')
+                        <strong class="text-danger">{{ $message }}</strong>
+                        @enderror
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- About Vision End -->
+     
+    <!-- About Vision Start -->
+      <div id="franchise_section">
+        <h3>Franchise Options</h3>
+        <div class="contentslider">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-group mb-2">
+                        <label>Franchise Description</label>
+                        <textarea name="franchise_description" id="editor6" class="form-control"></textarea>
+                        @error('franchise_description')
+                        <strong class="text-danger">{{ $message }}</strong>
+                        @enderror
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- About Vision End -->
+    
+    <!-- About Vision Start -->
+    <div id="scholarship_section">
+        <h3>Scholarship</h3>
+        <div class="contentslider">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-group mb-2">
+                        <label>Scholarship Description</label>
+                        <textarea name="scholarship_description" id="summernote" class="form-control"></textarea>
+                        @error('scholarship_description')
+                        <strong class="text-danger">{{ $message }}</strong>
+                        @enderror
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- About Vision End -->
 
     <div class="text-center">
         <button class="btn btn-primary" type="submit"> Save Section </button>
@@ -481,6 +542,22 @@
 
 
 <script type="text/javascript">
+ 
+      $('#summernote').summernote({
+        placeholder: 'Hello stand alone ui',
+        tabsize: 2,
+        height:220,
+        toolbar: [
+          ['style', ['style']],
+          ['font', ['bold', 'underline', 'clear']],
+          ['color', ['color']],
+          ['para', ['ul', 'ol', 'paragraph']],
+          ['table', ['table']],
+          ['insert', ['link', 'picture', 'video']],
+          ['view', ['fullscreen', 'codeview', 'help']]
+        ]
+      });
+    
     ClassicEditor.create(document.querySelector('#editor1'))
         .then(editor => {
             editor.ui.view.editable.element.style.height = '300px';
@@ -512,6 +589,23 @@
             console.error(error);
         });
 
+    ClassicEditor.create(document.querySelector('#editor5'))
+        .then(editor => {
+            editor.ui.view.editable.element.style.height = '300px';
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    ClassicEditor.create(document.querySelector('#editor6'))
+        .then(editor => {
+            editor.ui.view.editable.element.style.height = '300px';
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    ClassicEditor.create(document.querySelector('#editor7'))
+
+
     //Home
     $('#home_about_us').hide();
     $('#skill_id').hide();
@@ -521,7 +615,10 @@
     $('#home_blog').hide();
     $('#home_partner').hide();
     $('#home_current_scholarship').hide();
-
+    $('#carrer_section').hide();
+    $('#franchise_section').hide();
+    $('#scholarship_section').hide();
+    
     //About Us
     $('#about_the_company').hide();
     $('#about_director_message').hide();
@@ -538,6 +635,9 @@
         $('#home_service').hide();
         $('#home_blog').hide();
         $('#home_partner').hide();
+        $('#home_partner').hide();
+        $('#franchise_section').hide();
+        $('#scholarship_section').hide();
         
         //About Us
         $('#about_the_company').hide();
@@ -573,6 +673,12 @@
             $('#about_our_team').show();
         } else if ($(this).val() == 'about_vision') {
             $('#about_vision').show();
+        } else if ($(this).val() == 'carrer_section') {
+            $('#carrer_section').show();
+        } else if ($(this).val() == 'franchise_section') {
+            $('#franchise_section').show();
+        } else if ($(this).val() == 'scholarship_section') {
+            $('#scholarship_section').show();
         }
     });
 
@@ -582,17 +688,23 @@
         $('.imageupload').dropify();
     });
 
+    // $(".addbanner").click(function() {
+    //     $('.bannercontent').append('<h4>Banner</h4><div class="card"> <div class="card-body"> <div class="form-group mb-2"> <label>Banner Title</label> <input type="text" class="form-control" name="banner_title[]" required> </div> <div class="form-group mb-2"> <label>Banner Content</label> <textarea class="form-control" name="banner_content[]" placeholder="Description" required></textarea> </div> <div class="form-group mb-2"> <label> Banner Link </label> <input type="text" class="form-control" name="banner_link[]" required> </div> <div class="form-group mb-2"> <label> Banner Image or Video </label> <input type="file" class="imageupload" name="banner_image[]" data-height="200" multiple required/> </div> </div> </div>');
+    //     $('.imageupload').dropify();
+    // });
+    
     $(".addbanner").click(function() {
-        $('.bannercontent').append('<h4>Banner</h4><div class="card"> <div class="card-body"> <div class="form-group mb-2"> <label>Banner Title</label> <input type="text" class="form-control" name="banner_title[]"> </div> <div class="form-group mb-2"> <label>Banner Content</label> <textarea class="form-control" name="banner_content[]" placeholder="Description"></textarea> </div> <div class="form-group mb-2"> <label> Banner Link </label> <input type="text" class="form-control" name="banner_link[]"> </div> <div class="form-group mb-2"> <label> Banner Image or Video </label> <input type="file" class="imageupload" name="banner_image[]" data-height="200" multiple/> </div> </div> </div>');
+        $('.bannercontent').append('<h4>Banner</h4><div class="card"> <div class="card-body"> <div class="form-group mb-2"> <label>Banner Title</label> <input type="text" class="form-control" name="banner_title[]" required> </div> <div class="form-group mb-2"> <label>Banner Content</label> <textarea class="form-control" name="banner_content[]" placeholder="Description" required></textarea> </div> <div class="form-group mb-2"> <label> Banner Link </label> <input type="text" class="form-control" name="banner_link[]" required> </div> <div class="form-group mb-2"> <label> Banner Image or Video </label> <input type="file" class="imageupload" name="banner_image[]" data-height="200" multiple required/></div><div class="form-group mb-2"><label>Publish Country</label><select class="form-control" name="country[]"><option value="0">All</option><option value="1">Australia</option><option value="2">Bangladesh</option><option value="3">Nepal</option><option value="4">Malaysia</option><option value="5">India</option><option value="6">SriLanka</option><option value="7">Pakistan</option><option value="8">China</option></select></div></div></div>');
         $('.imageupload').dropify();
     });
+    
     $("body").delegate(".removecontentsection", "click", function() {
         $(this).closest('.card').remove();
     });
 
 
     $(".addpagesection").click(function() {
-        $('.contentsection').append('<div class="card"> <div class="card-body"> <div class="row align-items-end"><div class="col-5"> <div class="form-group"><label>Partner category</label> <select class="form-control" name="partner_category[]" id=""><option value="">Select Category</option><option value="australia">Australia</option><option value="canada">Canada</option><option value="partner">Professional Year Partners</option><option value="health">Health Insurance</option><option value="accreditation">Professional Accreditation</option><option value="scholarship">PCurrent Scholarships</option></select></div> </div> <div class="col-5"><div class="form-group"><label>Number of partner</label> <input type="number" class="form-control" name="no_of_partner[]"></div></div><div class="col-2"> <button class="btn btn-danger removecontentsection" type="button"><i class="mdi mdi-trash-can-outline"></i></button> </div> </div> </div> </div>');
+        $('.contentsection').append('<div class="card"> <div class="card-body"> <div class="row align-items-end"><div class="col-5"> <div class="form-group"><label>Partner category</label> <select class="form-control" name="partner_category[]" id="" required><option value="">Select Category</option><option value="australia">Australia</option><option value="canada">Canada</option><option value="partner">Professional Year Partners</option><option value="health">Health Insurance</option><option value="accreditation">Professional Accreditation</option><option value="scholarship">PCurrent Scholarships</option></select></div> </div> <div class="col-5"><div class="form-group"><label>Number of partner</label> <input type="number" class="form-control" name="no_of_partner[]" required></div></div><div class="col-2"> <button class="btn btn-danger removecontentsection" type="button"><i class="mdi mdi-trash-can-outline"></i></button> </div> </div> </div> </div>');
     });
     $("body").delegate(".removecontentsection", "click", function() {
         $(this).closest('.card').remove();

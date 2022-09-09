@@ -28,6 +28,10 @@
                     <option value="about_director_message">About Director Message</option>
                     <option value="about_our_team">About Our Team</option>
                     <option value="about_vision">About Vision</option>
+                    <option value="service_list">Service List</option>
+                    <option value="carrer_page">Carrer</option>
+                    <option value="franchise_page">Franchise</option>
+                    <option value="scholarship_section">Scholarship</option>
                 </select>
                 @error('page_type')
                 <strong class="text-danger">{{ $message }}</strong>
@@ -90,7 +94,7 @@
         var section_new='';
         for(var i=0; i<section.length; i++)
         {   //console.log(section[i]);
-            section_new+='<option value="'+section[i].section_type+'">'+section[i].section_type+'</option>';
+            section_new+='<option value="'+section[i].section_name+'">'+section[i].section_name+'</option>';
         }
         //console.log(section);
         $(".addpagesection").click(function () {

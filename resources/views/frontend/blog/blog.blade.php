@@ -1,12 +1,17 @@
 @extends('frontend.layouts.app')
+
+@section('title',html_entity_decode($other['meta_title']))
+@section('keywords', $other['meta_keywords'])
+@section('description', $other['meta_description'])
+
 @section('content')
 <!--Page Header Start-->
-<section class="page-header" style="background-image: url({{ asset('frontend/assets/images/backgrounds/group-of-multiethnic-students-on-graduation-day.jpg') }})">
+<section class="page-header" style="background-image: url({{ asset('frontend/assets/images/header/Blog.jpg') }})">
     <div class="page-header-shape-1"></div>
     <div class="page-header-shape-2"></div>
     <div class="container">
         <div class="page-header__inner">
-            <h2>Blog</h2>
+            <h2>Blogs</h2>
         </div>
     </div>
 </section>
@@ -24,7 +29,7 @@
                         <div class="blog-one__single wow fadeInUp" data-wow-delay="400ms">
                             <div class="blog-one__img-box">
                                 <div class="blog-one__img">
-                                    <img src="{{ asset($blog->blog_image) }}" alt="">
+                                    <img src="{{ asset($blog->blog_image) }}" alt="" width="419" height="277">
                                     <a href="{{ route('frontend.details-blog', ['slug'=> $blog->blog_slug ]) }}">
                                         <span class="blog-one__plus"></span>
                                     </a>

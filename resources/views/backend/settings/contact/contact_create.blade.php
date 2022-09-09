@@ -2,7 +2,7 @@
 @section('title', 'Add Contact')
 @section('content') 
 
-<form method="post" id="contactusform" action="{{route('backend.contact_save')}}" enctype="multipart/form-data">
+<form method="post" id="addContact" action="{{route('backend.contact_save')}}" enctype="multipart/form-data">
 	@csrf 
  	<div class="contactlist">	
 				<div class="card">
@@ -15,6 +15,13 @@
 							@enderror
 						</div>
 						<div class="form-group mb-2">
+							<label>Office</label>
+							<input type="text" class="form-control" name="office" value="{{old('office')}}">
+							@error('office')
+							<strong class="text-danger">{{ $message }}</strong>
+							@enderror
+						</div>
+						<div class="form-group mb-2">
 							<label>Address</label>
 							<textarea class="form-control" name="address" value="">{{old('address')}}</textarea>
 							@error('address')
@@ -23,8 +30,15 @@
 						</div>
 						<div class="form-group mb-2">
 							<label>Phone</label>
-							<input type="tel" class="form-control" name="phone" name="phone" value="{{old('phone')}}">
+							<input type="tel" class="form-control" name="phone" value="{{old('phone')}}">
 							@error('phone')
+							<strong class="text-danger">{{ $message }}</strong>
+							@enderror
+						</div>
+						<div class="form-group mb-2">
+							<label>Mobile</label>
+							<input type="tel" class="form-control" name="mobile" value="{{old('mobile')}}">
+							@error('mobile')
 							<strong class="text-danger">{{ $message }}</strong>
 							@enderror
 						</div>

@@ -3,7 +3,7 @@
 @section('content')
 <div class="card">
 	<div class="card-body">
-		<form id="formCategory" action="{{route('backend.update-service-category')}}" method="POST" enctype="multipart/form-data">
+		<form id="editCategory" action="{{route('backend.update-service-category')}}" method="POST" enctype="multipart/form-data">
             @csrf
 			<div class="form-group mb-2">
 				<label>Category Name</label>
@@ -46,10 +46,6 @@
                 @enderror
 			</div>
 			<div class="form-group mb-2">
-                <label>Category Image</label>
-                <input type="file" class="imageupload" name="category_image" data-default-file="{{asset($editCategory->category_image)}}">
-            </div>
-			<div class="form-group mb-2">
 				<label>Category Description</label>
 				<div id="editor" style="height: 300px;">{!! $editCategory->category_description !!}</div>
                 <textarea name="category_description" style="display:none" id="hiddenArea"></textarea>
@@ -58,7 +54,13 @@
                     <strong class="text-danger">{{ $message }}</strong>
                 @enderror
 			</div>
-
+            <div class="form-group mb-2">
+                <label>Category Header Top Image</label>
+                <input type="file" class="imageupload" name="category_header_image" data-default-file="{{asset($editCategory->category_image)}}">
+                @error('category_header_image')
+                <strong class="text-danger">{{ $message }}</strong>
+                @enderror
+            </div>
 			<div class="text-center">
 		        <button class="btn btn-primary" type="submit"> Update Category </button>
 		    </div>
@@ -68,7 +70,7 @@
 
 <script>
 	$(document).ready(function() {
-        $("#formCategory").on("submit", function() {
+        $("#editCategory").on("submit", function() {
             $("#hiddenArea").val($(".ql-editor").html());
         })
     });

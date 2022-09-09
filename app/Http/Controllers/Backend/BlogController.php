@@ -118,7 +118,7 @@ class BlogController extends Controller
             'meta_keywords' => 'required',
             'meta_description' => 'required',
             'blog_category_id' => 'required',
-            'blog_image' => 'required',
+            //'blog_image' => 'required|dimensions:width=1070,height=723'
         ]);
     }
     protected function blogInfoValidateUpdate($request){
@@ -129,6 +129,7 @@ class BlogController extends Controller
             'meta_keywords' => 'required',
             'meta_description' => 'required',
             'blog_category_id' => 'required',
+            //'blog_image' => 'required|dimensions:width=1070,height=723'
         ]);
     }
     protected function blogInfoNewValidateUpdate($request){
@@ -139,6 +140,7 @@ class BlogController extends Controller
             'meta_keywords' => 'required',
             'meta_description' => 'required',
             'blog_category_id' => 'required',
+            //'blog_image' => 'required|dimensions:width=1070,height=723'
         ]);
     }
 
@@ -153,9 +155,10 @@ class BlogController extends Controller
         $image->save($imageUrl);
         
         $thumbnail = $directory."thumbnail/".$imageName;
-        $image->resize(null, 200, function($constraint) {
-            $constraint->aspectRatio();
-        });
+        // $image->resize(null, 200, function($constraint) {
+        //     $constraint->aspectRatio();
+        // });
+        $image->resize(370,250);
         $image->save($thumbnail);
 
         return $thumbnail;
@@ -172,16 +175,18 @@ class BlogController extends Controller
             $slugValue = $blogSlug;
         }
         
-        if(isset($request->related_post) && $request->related_post != ''){
-            $relatedPost = implode(',', $request->related_post);
-        }
-
+        
         $blog = new Blog;
         $blog->meta_title = $request->meta_title;
         $blog->meta_keywords = $request->meta_keywords;
         $blog->meta_description = $request->meta_description;
         $blog->blog_title = $request->blog_title;
-        $blog->related_post = $relatedPost;
+        
+        if(isset($request->related_post) && $request->related_post != ''){
+            $relatedPost = implode(',', $request->related_post);
+            $blog->related_post = $relatedPost;
+        }
+        
         $blog->blog_category_id = $request->blog_category_id;
         $blog->blog_description = $request->blog_description;
         $blog->blog_slug = $slugValue;
@@ -196,11 +201,11 @@ class BlogController extends Controller
 
     protected function blogBasicInfoUpdate($request, $blog, $imageUrl=null){
         
+        $blog->blog_title = $request->blog_title;
         if(isset($request->related_post) && $request->related_post != ''){
             $relatedPost = implode(',', $request->related_post);
+            $blog->related_post = $relatedPost;
         }
-        $blog->blog_title = $request->blog_title;
-        $blog->related_post = $relatedPost;
         $blog->meta_title = $request->meta_title;
         $blog->meta_keywords = $request->meta_keywords;
         $blog->meta_description = $request->meta_description;
@@ -249,7 +254,7 @@ class BlogController extends Controller
     }
     public function editBlog($id){
         $blog = Blog::with('category')->find($id);
-        // dd($blog);
+        //dd($blog);
         $postId = explode(',',$blog->related_post);
         
         $relatedPost = [];
@@ -281,10 +286,15 @@ class BlogController extends Controller
 
         $blogImage = $request->file('blog_image');
         $blog = Blog::find($request->id);
-
+        $blog_image_new=explode('/',$blog->blog_image);
+        
         if($blogImage){
             if (File::exists($blog->blog_image)) {
                 unlink($blog->blog_image);
+            }
+            if (File::exists('admin/image/blog/'.$blog_image_new[4]))
+            {
+                unlink('admin/image/blog/'.$blog_image_new[4]);
             }
             $imageUrl = $this->blogImageUpload($request);
             $this->blogBasicInfoUpdate($request, $blog, $imageUrl);

@@ -45,6 +45,8 @@ class AuthenticatedSessionController extends Controller
             Session::put('user_id', $get_user['id']);
             Session::put('admin_name', $get_user['name']);
             Session::put('admin_image', $get_user['profile_image']);
+            Session::put('user_type', $get_user['user_type']);
+            
             if($get_user['user_type'] == 1)
             {
                 //Session::put('avatar', $get_user['avatar']);
@@ -72,6 +74,18 @@ class AuthenticatedSessionController extends Controller
              else if($get_user['user_type'] == 3)
             {
                 //echo 'hii';die();
+                if ($redirectTo) {
+                    return redirect($redirectTo);
+                } 
+                else 
+                {
+                     
+                    return redirect('admin/dashboard');
+                }
+    
+            }
+              else if($get_user['user_type'] == 4)
+            {
                 if ($redirectTo) {
                     return redirect($redirectTo);
                 } 

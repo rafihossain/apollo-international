@@ -17,16 +17,20 @@
 		    }}'>
             <div class="swiper-wrapper">
 
-                @foreach($bannerlist as $banner)
-                <div class="swiper-slide">
+                @foreach($bannerlist as $key=>$banner)
+                
+                
+                @php
+                $baseUrl = $_SERVER['HTTP_HOST'];
+                @endphp
+                
+                @if($banner->country == 0)
+                <div class="swiper-slide bannercount{{$key}}">
                     <div class="image-layer" style="background-image: url({{ asset($banner->banner_image) }})">
                     </div>
 
                     <div class="image-layer-overlay"></div>
-                    <div class="main-slider-shape-1"></div>
-                    <div class="main-slider-shape-2"></div>
-                    <div class="main-slider-shape-3"></div>
-                    <div class="main-slider-shape-4"></div>
+                  
                     <!-- /.image-layer -->
                     <div class="container">
                         <div class="row">
@@ -35,12 +39,66 @@
 
                                     <p>{{ $banner->banner_title }}</p>
                                     <h2>{{ $banner->banner_content }}</h2>
-                                    <a href="{{ $banner->banner_link }}" class="thm-btn"><span>Book an Appointment </span></a>
+                                    @if($banner->banner_link)
+                                        <a href="{{ $banner->banner_link }}" class="thm-btn"><span>Book an Appointment </span></a>
+                                    @endif
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                @endif
+                @if($banner->country == 1 && ($baseUrl == "apollointl.com.au" || $baseUrl == "www.apollointl.com.au"))
+                <div class="swiper-slide bannercount{{$key}}">
+                    <div class="image-layer" style="background-image: url({{ asset($banner->banner_image) }})">
+                    </div>
+
+                    <div class="image-layer-overlay"></div>
+                  
+                    <!-- /.image-layer -->
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="main-slider__content">
+
+                                    <p>{{ $banner->banner_title }}</p>
+                                    <h2>{{ $banner->banner_content }}</h2>
+                                    @if($banner->banner_link)
+                                        <a href="{{ $banner->banner_link }}" class="thm-btn"><span>Book an Appointment </span></a>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @endif
+                @if($banner->country == 2 && ($baseUrl == "apollointl.com.bd" || $baseUrl == "www.apollointl.com.bd"))
+                <div class="swiper-slide bannercount{{$key}}">
+                    <div class="image-layer" style="background-image: url({{ asset($banner->banner_image) }})">
+                    </div>
+
+                    <div class="image-layer-overlay"></div>
+                  
+                    <!-- /.image-layer -->
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="main-slider__content">
+
+                                    <p>{{ $banner->banner_title }}</p>
+                                    <h2>{{ $banner->banner_content }}</h2>
+                                    @if($banner->banner_link)
+                                        <a href="{{ $banner->banner_link }}" class="thm-btn"><span>Book an Appointment </span></a>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @endif
+                
+                
+                
                 @endforeach
 
             </div>

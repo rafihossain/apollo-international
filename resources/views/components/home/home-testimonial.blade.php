@@ -3,60 +3,30 @@
 <section class="testimonial-one">
     <div class="container">
         <div class="row">
-            <div class="col-xl-4 col-lg-5">
-                <div class="testimonial-one__left">
-                    <div class="section-title text-left">
+            <div class="col-12">
+                <div class="testimonial-one__center">
+                    <div class="section-title text-center">
                         <span class="section-title__tagline">{{$testimonial->testimonial_sub_title}}</span>
                         <h2 class="section-title__title">{{$testimonial->testimonial_title}}</h2>
-                    </div>
-                    <div class="testimonial-one__btn-box">
-                        <a href="about.html" class="thm-btn testimonial-one__btn"><span>All feedbacks</span></a>
-                        <div class="testimonial-one__btn-shape"></div>
-                    </div>
+                    </div> 
                 </div>
-            </div>
-            <div class="col-xl-8 col-lg-7">
-                <div class="testimonial-one__slider">
-
-                    <div class="swiper-container" id="testimonials-one__thumb">
-                        <div class="swiper-wrapper">
-                            @foreach($testimonials as $testimonial)
-                            <div class="swiper-slide">
-                                <div class="testimonial-one__img-holder">
-                                    <img class="lazy" data-original="{{ asset($testimonial->user_image) }}" alt="">
-                                    <div class="testimonial-one__quote">
-
-                                    </div>
-                                </div>
-                            </div>
-                            @endforeach
-                        </div><!-- /.swiper-wrapper -->
-                    </div><!-- /#testimonials-one__thumb.swiper-container -->
-
-                    <div class="testimonials-one__main-content">
-                        <div class="swiper-container" id="testimonials-one__carousel">
-                            <div class="swiper-wrapper">
-
-                            @foreach($testimonials as $testimonial)
-                                <div class="swiper-slide">
-                                    <div class="testimonial-one__conent-box">
-                                        <p class="testimonial-one__text">{!!$testimonial->user_comment!!}</p>
-                                        <div class="testimonial-one__client-details">
-                                            <h4 class="testimonial-one__client-name">{{$testimonial->user_name}}</h4>
-                                            <span class="testimonial-one__clinet-title">Satisfied
-                                                customers</span>
-                                        </div>
-                                    </div>
-                                </div><!-- /.swiper-slide -->
-                            @endforeach
-                        
-                            </div><!-- /.swiper-wrapper -->
-                            <div id="testimonials-one__carousel-pagination"></div>
-                            <!-- /#testimonials-one__carousel-pagination -->
-                        </div><!-- /#testimonials-one__thumb.swiper-container -->
-                    </div>
+                <div class="row"> 
+                    @foreach($testimonials as $testimonial)
+                    <div class="col-md-6 col-lg-4">
+                        <div class="testimonials-two__card">
+                            <div class="testimonials-two__card__inner"> 
+                                <div class="testimonials-two__summery">
+                                    <!-- <video width="320" height="180" controls>-->
+                                    <!--  <source src="{{ asset('admin/image/testimonial')}}/{{$testimonial['testimonial_video']}}" type="video/mp4">-->
+                                    <!--  Your browser does not support the video tag.-->
+                                    <!--</video>-->
+                                  <iframe style="width:100%;" width="560" height="315" src="https://www.youtube.com/embed/{{$testimonial->user_video_url}}?feature=oembed&autoplay=1&showinfo=0&controls=0" title="YouTube video player" frameborder="0" allow="accelerometer;  clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                </div><!-- /.testimonials-two__summery -->
+                            </div><!-- /.testimonials-two__card__inner -->
+                        </div><!-- /.testimonials-two__card -->
+                    </div><!-- /.col-md-6 -->
+                    @endforeach 
                 </div>
-            </div>
         </div>
     </div>
 </section>

@@ -24,6 +24,25 @@
                 <strong class="text-danger">{{ $message }}</strong>
                 @enderror
             </div>
+            
+            <div class="form-group mb-2">
+                <label>Publish Country</label>
+                <select class="form-control form-control @error('country') is-invalid @enderror" name="country">
+                    <option value="">Select Country</option>
+                    <option value="0" {{$faq->country == 0 ? 'selected' : ''}}>All</option>
+                    <option value="1" {{$faq->country == 1 ? 'selected' : ''}}>Australia</option>
+                    <option value="2" {{$faq->country == 2 ? 'selected' : ''}}>Bangladesh</option>
+                    <option value="3" {{$faq->country == 3 ? 'selected' : ''}}>Nepal</option>
+                    <option value="4" {{$faq->country == 4 ? 'selected' : ''}}>Malaysia</option>
+                    <option value="5" {{$faq->country == 5 ? 'selected' : ''}}>India</option>
+                    <option value="6" {{$faq->country == 6 ? 'selected' : ''}}>SriLanka</option>
+                    <option value="7" {{$faq->country == 7 ? 'selected' : ''}}>Pakistan</option>
+                    <option value="8" {{$faq->country == 8 ? 'selected' : ''}}>China</option>
+                </select>
+                @error('country')
+                <strong class="text-danger">{{ $message }}</strong>
+                @enderror
+            </div>
 
             <div class="text-center">
                 <button class="btn btn-primary" type="submit"> Update Faq </button>

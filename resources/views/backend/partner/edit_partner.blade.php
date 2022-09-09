@@ -24,6 +24,15 @@
                     {{ ($partner->partner_category == 'australia' ? 'selected' : '')}}>Australia</option>
                     <option value="canada" 
                     {{ ($partner->partner_category == 'canada' ? 'selected' : '')}}>Canada</option>
+                    <option value="canadastudy" 
+                    {{ ($partner->partner_category == 'canadastudy' ? 'selected' : '')}}>Canada Study</option>
+                   
+                    <option value="malaysia" 
+                    {{ ($partner->partner_category == 'malaysia' ? 'selected' : '')}}>Malaysia</option>
+                    <option value="uk" 
+                    {{ ($partner->partner_category == 'uk' ? 'selected' : '')}}>UK</option>
+                    <option value="usa" 
+                    {{ ($partner->partner_category == 'usa' ? 'selected' : '')}}>USA</option> 
                     <option value="partner" 
                     {{ ($partner->partner_category == 'partner' ? 'selected' : '')}}>Professional Year Partners</option>
                     <option value="health" 
@@ -31,7 +40,7 @@
                     <option value="accreditation" 
                     {{ ($partner->partner_category == 'accreditation' ? 'selected' : '')}}>Professional Accreditation</option>
                     <option value="scholarship" 
-                    {{ ($partner->partner_category == 'scholarship' ? 'selected' : '')}}>PCurrent Scholarships</option>
+                    {{ ($partner->partner_category == 'scholarship' ? 'selected' : '')}}>Current Scholarships</option>
                 </select>
                 @error('partner_category')
                 <strong class="text-danger">{{ $message }}</strong>
@@ -42,6 +51,13 @@
 				<input type="file" class="imageupload" name="partner_image" 
                 data-default-file="{{asset($partner->partner_image)}}">
                 @error('partner_image')
+                <strong class="text-danger">{{ $message }}</strong>
+                @enderror
+			</div>
+			<div class="form-group mb-2">
+				<label>Partner Sorting</label>
+				<input type="number" name="partner_sorting" class="form-control @error('partner_sorting') is-invalid @enderror" value="{{ $partner->partner_sorting }}">
+                @error('partner_sorting')
                 <strong class="text-danger">{{ $message }}</strong>
                 @enderror
 			</div>

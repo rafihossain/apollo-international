@@ -1,16 +1,37 @@
 @extends('frontend.layouts.app')
+
+@section('title',html_entity_decode($serviceCategory->meta_title))
+@section('keywords', $serviceCategory->meta_keywords)
+@section('description', $serviceCategory->meta_description)
+
 @section('content')
 <!--Page Header Start-->
+@if($serviceCategory->category_image)
+<section class="page-header" style="background-image: url({{asset($serviceCategory->category_image)}});">
+    <div class="page-header-shape-1"></div>
+    <div class="page-header-shape-2"></div>
+    <div class="container">
+        <div class="page-header__inner">
+            
+            <h2>{{ $serviceCategory->category_name }}</h2>
+        </div>
+    </div>
+</section>
+@else
 <section class="page-header" style="background-image: url({{ asset('frontend/assets/images/backgrounds/group-of-multiethnic-students-on-graduation-day.jpg') }});">
     <div class="page-header-shape-1"></div>
     <div class="page-header-shape-2"></div>
     <div class="container">
         <div class="page-header__inner">
-            <h2>Services</h2>
+            
+            <h2>{{ $serviceCategory->category_name }}</h2>
         </div>
     </div>
 </section>
+
+@endif
 <!--Page Header End-->
+
 
 <section class="blog-one blog-grid">
     <div class="container">
@@ -21,7 +42,8 @@
                 <!--Portfolio One Single-->
                 <div class="portfolio-one__single wow fadeInUp" data-wow-delay="100ms">
                     <div class="portfolio-one__img">
-                        <img src="{{ asset($service->service_image) }}" width="370" height="500" alt="">
+                        <?php   $service_image=explode('/',$service->service_image);  ?>
+                        <img src="{{ asset('admin/image/service')}}/{{$service_image[4]}}" width="370" height="425" alt="">
                         <div class="portfolio-one__experience">
                             <div class="portfolio-one__fimlor">
                                 <p class="portfolio-one__fimlor-title"><a href="{{ route('frontend.details-service', ['slug' => $service->service_slug]) }}">{{ $service->service_title }}</a></p>
@@ -34,7 +56,31 @@
                 </div>
             </div>
             @endforeach
-
+              @php
+           //$baseUrl = url('/');
+           $baseUrl = $_SERVER['HTTP_HOST'];
+           
+            
+             @endphp
+            @if( ($baseUrl == "apollointl.com.bd" || $baseUrl == "www.apollointl.com.bd") && ($_SERVER['REQUEST_URI']=='/service/category/student-services') )
+            
+                <div class="col-xl-4 col-lg-6 col-md-6 mb-4">
+                    <!--Portfolio One Single-->
+                    <div class="portfolio-one__single wow fadeInUp" data-wow-delay="100ms" >
+                        <div class="portfolio-one__img">
+                             <img src="{{ asset('frontend/assets/images/resources/scholarship.jpg')}}" width="370" height="425" alt="">
+                            <div class="portfolio-one__experience">
+                                <div class="portfolio-one__fimlor">
+                                    <p class="portfolio-one__fimlor-title"><a href="{{ url('/scholarship') }}">Scholarship</a></p>
+                                </div>
+                            </div>
+                            <div class="portfolio-one__arrow">
+                                <a href="{{ url('/scholarship') }}"><span class="icon-right-arrow"></span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
             @if($categoryPosts->hasPages())
                 <div class="text-center m-3">
                     @if($categoryPosts->onFirstPage())
@@ -56,159 +102,56 @@
         </div>
     </div>
 </section>
-<!--Testimonial One Start-->
-<section class="testimonial-one">
-    <div class="container">
-        <div class="row">
-            <div class="col-xl-4 col-lg-5">
-                <div class="testimonial-one__left">
-                    <div class="section-title text-left">
-                        <span class="section-title__tagline">Customer feedback</span>
-                        <h2 class="section-title__title">What they are talking about us?</h2>
-                    </div>
-                    <div class="testimonial-one__btn-box">
-                        <a href="about.html" class="thm-btn testimonial-one__btn"><span>All feedbacks</span></a>
-                        <div class="testimonial-one__btn-shape"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-8 col-lg-7">
-                <div class="testimonial-one__slider">
 
 
-                    <div class="swiper-container" id="testimonials-one__thumb">
-                        <div class="swiper-wrapper">
-                            
-                            @foreach($testimonials as $testimonial)
-                            <div class="swiper-slide">
-                                <div class="testimonial-one__img-holder">
-                                    <img src="{{ asset($testimonial->user_image) }}" height="100" alt="">
-                                    <div class="testimonial-one__quote">
+@for ($i = 0; $i < count($sectionType); $i++)
+    @switch ($sectionType[$i])
+        @case ("banner")
+            <x-home.home-banner-section :bannerlist="$bannerlist"/>
+            @break
+        @case ("occupation_search")
+             <x-home.home-calculation /> 
+            @break
+        @case ("home_aboutus")
+            <x-home.home-about-us :homeAboutUs="$homeAboutUs"/>
+            @break
+        @case ("skills")
+            <x-home.home-skill :skill="$skill"/>
+            @break
+        @case ("home_faq")
+            <x-home.home-faq :faq="$faq" :faqs="$faqs" />
+            @break
+        @case ("home_testimonial")
+            <x-home.home-testimonial :testimonial="$testimonial" :testimonials="$testimonials" />
+            @break
+        @case ("home_service")
+            <x-home.home-service :service="$service" :serviceSections="$serviceSections" />
+            @break
+        @case ("home_blog")
+            <x-home.home-blog :blog="$blog" :blogSections="$blogSections" />
+            @break
+        @case ("home_partner")
+            <x-home.home-partner :partners="$partners" />
+            @break
+        @case ("home_current_scholarship")
+            <x-home.home-scholarship :scholarship="$scholarship" />
+            @break
+        @case ("about_the_company")
+            <x-about.about-company :aboutCompany="$aboutCompany" />
+            @break
+        @case ("about_director_message")
+            <x-about.director_messages :directorMessage="$directorMessage"/>
+            @break
+        @case ("about_our_team")
+            <x-about.mission-vision :aboutVision="$aboutVision" />
+            @break
+        @case ("about_vision")
+            <x-about.our-leaders :teamSections="$teamSections" :team="$team" />
+            @break
 
-                                    </div>
-                                </div>
-                            </div>
-                            @endforeach
+        @default
+            {{ "wrong" }}
+    @endswitch
+@endfor
 
-                        </div><!-- /.swiper-wrapper -->
-                    </div><!-- /#testimonials-one__thumb.swiper-container -->
-
-                    <div class="testimonials-one__main-content">
-                        <div class="swiper-container" id="testimonials-one__carousel">
-                            <div class="swiper-wrapper">
-                                @foreach($testimonials as $testimonial)
-                                    <div class="swiper-slide">
-                                        <div class="testimonial-one__conent-box">
-                                            <p class="testimonial-one__text">{!! $testimonial->user_comment !!}</p>
-                                            <div class="testimonial-one__client-details">
-                                                <h4 class="testimonial-one__client-name">{{ $testimonial->user_name }}</h4>
-                                                <span class="testimonial-one__clinet-title">Satisfied
-                                                    customers</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-                            <div id="testimonials-one__carousel-pagination"></div>
-                            <!-- /#testimonials-one__carousel-pagination -->
-                        </div><!-- /#testimonials-one__thumb.swiper-container -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!--Testimonial One End-->
-<!--Brand Two-->
-<section class="brand-one">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="section-title text-left">
-                    <h2 class="section-title__title">Professional Year Partners</h2>
-                </div>
-                <div class="thm-swiper__slider swiper-container" data-swiper-options='{"spaceBetween": 100, "slidesPerView": 5, "autoplay": { "delay": 5000 }, "breakpoints": {
-			            "0": {
-			                "spaceBetween": 30,
-			                "slidesPerView": 2
-			            },
-			            "375": {
-			                "spaceBetween": 30,
-			                "slidesPerView": 2
-			            },
-			            "575": {
-			                "spaceBetween": 30,
-			                "slidesPerView": 2
-			            },
-			            "767": {
-			                "spaceBetween": 50,
-			                "slidesPerView": 2
-			            },
-			            "991": {
-			                "spaceBetween": 50,
-			                "slidesPerView": 3
-			            },
-			            "1199": {
-			                "spaceBetween": 100,
-			                "slidesPerView": 3
-			            }
-			        }}'>
-                    <div class="swiper-wrapper">
-
-                        @foreach($partners as $partner)
-                            @if($partner->partner_category == 'partner')
-                                <div class="swiper-slide">
-                                    <img src="{{ asset($partner->partner_image) }}" alt="">
-                                </div>
-                            @endif
-                        @endforeach
-
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="section-title text-left">
-                    <h2 class="section-title__title">Health Insurance</h2>
-                </div>
-                <div class="thm-swiper__slider swiper-container" data-swiper-options='{"spaceBetween": 100, "slidesPerView": 5, "autoplay": { "delay": 5000 }, "breakpoints": {
-			            "0": {
-			                "spaceBetween": 30,
-			                "slidesPerView": 2
-			            },
-			            "375": {
-			                "spaceBetween": 30,
-			                "slidesPerView": 2
-			            },
-			            "575": {
-			                "spaceBetween": 30,
-			                "slidesPerView": 2
-			            },
-			            "767": {
-			                "spaceBetween": 50,
-			                "slidesPerView": 2
-			            },
-			            "991": {
-			                "spaceBetween": 50,
-			                "slidesPerView": 3
-			            },
-			            "1199": {
-			                "spaceBetween": 100,
-			                "slidesPerView": 3
-			            }
-			        }}'>
-                    <div class="swiper-wrapper">
-                        @foreach($partners as $partner)
-                            @if($partner->partner_category == 'health')
-                                <div class="swiper-slide">
-                                    <img src="{{ asset($partner->partner_image) }}" alt="">
-                                </div>
-                            @endif
-                        @endforeach
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!--Brand Two End-->
 @endsection

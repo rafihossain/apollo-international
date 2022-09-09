@@ -55,7 +55,7 @@ $().ready(function () {
            
         }
     });
-    $("#formCategory").validate({
+    $("#addCategory").validate({
         // in 'rules' user have to specify all the constraints for respective fields
         rules: {
             category_name: "required", 
@@ -88,12 +88,46 @@ $().ready(function () {
            
         }
     });
-     $("#formService").validate({
+    $("#editCategory").validate({
+        // in 'rules' user have to specify all the constraints for respective fields
+        rules: {
+            category_name: "required", 
+            meta_title: "required", 
+            meta_keywords: "required",
+            meta_description: "required",
+            
+            
+            category_name: {
+                required: true,
+            },
+            meta_title: {
+                required: true, 
+            },
+            meta_keywords: {
+                required: true,
+            },
+            meta_description: {
+                required: true, 
+            },
+      
+             
+        },
+        // in 'messages' user have to specify message as per rules
+        messages: {
+            category_name: "The category name field is required.", 
+            meta_title: "The meta title field is required.", 
+            meta_keywords: "The meta keywords field is required.",
+            meta_description: "The meta description field is required.",
+           
+        }
+    });
+     $("#addService").validate({
         // in 'rules' user have to specify all the constraints for respective fields
         rules: {
             service_title: "required", 
             meta_title: "required", 
             meta_keywords: "required",
+            service_category_id: 'required',
             meta_description: "required",
             service_description: "required",
             service_image: "required",
@@ -114,6 +148,9 @@ $().ready(function () {
             service_description: {
                 required: true, 
             },
+            service_category_id: {
+                required: true, 
+            },
             service_image: {
                 required: true, 
             },
@@ -127,7 +164,44 @@ $().ready(function () {
             meta_keywords: "The meta keywords field is required.",
             meta_description: "The meta description field is required.",
             service_description: "The meta description field is required.",
+            service_category_id: "The Service Category field is required.",
             service_image: "The service image field is required.",
+        }
+    });
+    $("#editService").validate({
+        // in 'rules' user have to specify all the constraints for respective fields
+        rules: {
+            service_title: "required", 
+            meta_title: "required", 
+            meta_keywords: "required",
+            meta_description: "required",
+            service_description: "required",
+            
+            
+            service_title: {
+                required: true,
+            },
+            meta_title: {
+                required: true, 
+            },
+            meta_keywords: {
+                required: true,
+            },
+            meta_description: {
+                required: true, 
+            },
+            service_description: {
+                required: true, 
+            },
+             
+        },
+        // in 'messages' user have to specify message as per rules
+        messages: {
+            service_title: "The service title field is required.", 
+            meta_title: "The meta title field is required.", 
+            meta_keywords: "The meta keywords field is required.",
+            meta_description: "The meta description field is required.",
+            service_description: "The meta description field is required.",
            
         }
     });
@@ -164,8 +238,6 @@ $().ready(function () {
         rules: {
             partner_name: "required", 
             partner_category: "required", 
-            partner_image: "required", 
-            
             
             
             partner_name: {
@@ -173,9 +245,6 @@ $().ready(function () {
             }, 
             partner_category: {
                 required: true,
-            }, 
-            partner_image: {
-                required: true, 
             },
       
              
@@ -183,12 +252,11 @@ $().ready(function () {
         // in 'messages' user have to specify message as per rules
         messages: {
             partner_name: "The partner name field is required.",  
-            partner_category: "The partner category field is required.",  
-            partner_image: "The partner image field is required.",
+            partner_category: "The partner category field is required.",
            
         }
     });
-    $("#formTestimonial").validate({
+    $("#addTestimonial").validate({
         // in 'rules' user have to specify all the constraints for respective fields
         rules: {
             user_name: "required", 
@@ -197,10 +265,16 @@ $().ready(function () {
             user_rating: "required",
             
             
-            partner_name: {
+            user_name: {
                 required: true,
-            }, 
-            partner_image: {
+            },
+            user_comment: {
+                required: true,
+            },
+            user_image: {
+                required: true,
+            },
+            user_rating: {
                 required: true, 
             },
       
@@ -211,6 +285,34 @@ $().ready(function () {
             user_name: "The user name field is required.", 
             user_comment: "The user comment field is required.",
             user_image: "The user image field is required.", 
+            user_rating: "The user rating field is required.",
+           
+        }
+    });
+    $("#editTestimonial").validate({
+        // in 'rules' user have to specify all the constraints for respective fields
+        rules: {
+            user_name: "required", 
+            user_comment: "required",
+            user_rating: "required",
+            
+            
+            user_name: {
+                required: true,
+            },
+            user_comment : {
+                required: true,
+            },
+            user_rating: {
+                required: true, 
+            },
+      
+             
+        },
+        // in 'messages' user have to specify message as per rules
+        messages: {
+            user_name: "The user name field is required.", 
+            user_comment: "The user comment field is required.", 
             user_rating: "The user rating field is required.",
            
         }
@@ -241,6 +343,31 @@ $().ready(function () {
            
         }
     });
+    
+    $("#editteam").validate({
+        // in 'rules' user have to specify all the constraints for respective fields
+        rules: {
+            member_name: "required", 
+            member_position: "required",
+           
+            
+            
+            partner_name: {
+                required: true,
+            }, 
+            member_position: {
+                required: true, 
+            },
+      
+             
+        },
+        // in 'messages' user have to specify message as per rules
+        messages: {
+            member_name: "The member name field is required.", 
+            member_position: "The member position field is required.",
+           
+        }
+    });
      $("#formFaq").validate({
         // in 'rules' user have to specify all the constraints for respective fields
         rules: {
@@ -263,37 +390,66 @@ $().ready(function () {
            
         }
     });
-    $("#contactusform").validate({
+    $("#addContact").validate({
         // in 'rules' user have to specify all the constraints for respective fields
         rules: {
             country: "required", 
-            address: "required", 
-            phone: "required",
-            email: "required",
-            location_image: "required",
+            //address: "required", 
+            //phone: "required",
+            //email: "required",
+           // location_image: "required",
             
             country: {
                 required: true,
             }, 
-            phone: {
-                required: true, 
-            },
-            email: {
-                required: true, 
-            },
-            location_image: {
-                required: true, 
-            },
+            // phone: {
+            //     required: true, 
+            // },
+            // email: {
+            //     required: true, 
+            // },
+            // location_image: {
+            //     required: true, 
+            // },
       
              
         },
         // in 'messages' user have to specify message as per rules
         messages: {
             country: "The country field is required.", 
-            address: "The address field is required.", 
-            phone: "The phone field is required.",
-            email: "The email field is required.",
-            location_image: "The image field is required.",
+            // address: "The address field is required.", 
+            // phone: "The phone field is required.",
+            // email: "The email field is required.",
+            // location_image: "The image field is required.",
+            
+        }
+    });
+    $("#editContact").validate({
+        // in 'rules' user have to specify all the constraints for respective fields
+        rules: {
+            country: "required", 
+            // address: "required", 
+            // phone: "required",
+            // email: "required",
+            
+            country: {
+                required: true,
+            }, 
+            // phone: {
+            //     required: true, 
+            // },
+            // email: {
+            //     required: true, 
+            // },
+      
+             
+        },
+        // in 'messages' user have to specify message as per rules
+        messages: {
+            country: "The country field is required.", 
+            // address: "The address field is required.", 
+            // phone: "The phone field is required.",
+            // email: "The email field is required.",
             
         }
     });
@@ -382,7 +538,48 @@ $().ready(function () {
             blog_image: "The blog image field is required.",
         }
     });
-    
+     $("#formBlogedit").validate({
+        // in 'rules' user have to specify all the constraints for respective fields
+        rules: {
+            blog_title: "required", 
+            meta_title: "required", 
+            meta_keywords: "required",
+            meta_description: "required",
+            blog_category_id: "required",
+            blog_description: "required",
+           
+            blog_title: {
+                required: true,
+            }, 
+            meta_title: {
+                required: true, 
+            },
+            meta_keywords: {
+                required: true, 
+            },
+            meta_description: {
+                required: true, 
+            },
+            blog_category_id: {
+                required: true, 
+            },
+            blog_description: {
+                required: true, 
+            },
+         
+             
+        },
+        // in 'messages' user have to specify message as per rules
+        messages: {
+            blog_title: "The blog title field is required.", 
+            meta_title: "The meta title field is required.", 
+            meta_keywords: "The meta keywords field is required.",
+            meta_description: "The meta description field is required.",
+            blog_category_id: "The blog category field is required.",
+            blog_description: "The blog description field is required.",
+            
+        }
+    });
     
     
 });

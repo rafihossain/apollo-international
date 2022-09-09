@@ -1,5 +1,9 @@
 @extends('frontend.master')
 
+@section('title', $other['meta_title'])
+@section('keywords', $other['meta_keywords'])
+@section('description', $other['meta_description'])
+
 @section('content') 
 <!--Page Header Start-->
 <section class="page-header" style="background-image: url({{ asset('frontend/assets/images/backgrounds/group-of-multiethnic-students-on-graduation-day.jpg') }});">
@@ -7,11 +11,6 @@
     <div class="page-header-shape-2"></div>
     <div class="container">
         <div class="page-header__inner">
-            <ul class="thm-breadcrumb list-unstyled">
-                <li><a href="index.html">Home</a></li>
-                <li><span>.</span></li>
-                <li>Contact Us</li>
-            </ul>
             <h2>Contact Us</h2>
         </div>
     </div>

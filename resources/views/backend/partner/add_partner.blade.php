@@ -19,10 +19,14 @@
                     <option value="">Select Category</option>
                     <option value="australia">Australia</option>
                     <option value="canada">Canada</option>
+                    <option value="canadastudy">Canada Study</option>
+                    <option value="malaysia">Malaysia</option>
+                    <option value="uk">UK</option>
+                    <option value="usa">USA</option>
                     <option value="partner">Professional Year Partners</option>
                     <option value="health">Health Insurance</option>
                     <option value="accreditation">Professional Accreditation</option>
-                    <option value="scholarship">PCurrent Scholarships</option>
+                    <option value="scholarship">Current Scholarships</option>
                 </select>
                 @error('partner_category')
                 <strong class="text-danger">{{ $message }}</strong>

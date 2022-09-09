@@ -16,7 +16,7 @@
 
                 </div>
                 <h3 class="odometer" data-count="{{ $skill->global_office }}">00</h3>
-                <p class="counter-one__text">Global Office</p>
+                <p class="counter-one__text">Global Offices</p>
             </li>
             <li class="counter-one__single wow fadeInUp" data-wow-delay="300ms">
                 <div class="counter-one__icon">

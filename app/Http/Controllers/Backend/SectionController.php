@@ -31,7 +31,7 @@ class SectionController extends Controller
         $request->validate([
             'about_us_title' => 'required',
             'about_us_sub_title' => 'required',
-            'about_us_image' => 'required',
+            //'about_us_image' => 'required|dimensions:width=1200,height=800',
             'trusted' => 'required'
         ]);
     }
@@ -52,6 +52,7 @@ class SectionController extends Controller
             'tagline' => 'required',
             'title' => 'required',
             'number_of_faq' => 'required',
+            //'faq_image'=>'required|dimensions:width=902,height=684',
             'image_title' => 'required'
         ]);
     }
@@ -94,7 +95,7 @@ class SectionController extends Controller
     {
         $request->validate([
             'current_scholarship_title' => 'required',
-            'current_scholarship_image' => 'required',
+            //'current_scholarship_image' => 'required|dimensions:width=768,height=768',
         ]);
     }
 
@@ -105,7 +106,8 @@ class SectionController extends Controller
         $request->validate([
             'company_title' => 'required',
             'company_description' => 'required',
-            'company_image' => 'required',
+            'company_image' => 'required'
+            //'company_image' => 'required|dimensions:width=1280,height=1280',
         ]);
     }
     //Director message
@@ -116,6 +118,7 @@ class SectionController extends Controller
             'director_name' => 'required',
             'director_description' => 'required',
             'director_image' => 'required',
+            //'director_image' => 'required|dimensions:width=500,height=564',
         ]);
     }
     //Our team
@@ -132,7 +135,7 @@ class SectionController extends Controller
     {
         $request->validate([
             'vision_description' => 'required',
-            'vision_image' => 'required',
+            //'vision_image' => 'required|dimensions:width=500,height=564'
         ]);
     }
 
@@ -181,6 +184,26 @@ class SectionController extends Controller
             return $fileName;
         }
     }
+      protected function bannerImage_update_Upload($request)
+    {
+        $bannerImages = $request->file('banner_image');
+
+
+        if ($request->hasFile('banner_image')) {
+            
+            $fileName = [];
+            foreach ($bannerImages as $key=>$image) {
+                $fileType = $image->getClientOriginalExtension();
+                $imageName = 'banner_' . time() . '_' . rand(10000, 999999) . '.' . $fileType;
+                $directory = 'admin/image/section/banner/';
+                $imageUrl = $directory . $imageName;
+                $image->move($directory, $imageName);
+                $fileName[$key] = $imageUrl;
+            }
+      
+            return $fileName;
+        } 
+    }
     //Faq image
     protected function faqImageUpload($request)
     {
@@ -199,15 +222,15 @@ class SectionController extends Controller
         });
         $image->save($thumbnail);
 
-        return $thumbnail;
+        return $imageName;
     }
     //Scholarship
     protected function home_current_scholarship_image($request)
     {
         $current_scholarship_image = $request->file('current_scholarship_image');
-
         if ($request->hasFile('current_scholarship_image')) {
-            $fileName = [];
+            $fileName1 = [];
+            $i = 0;
             foreach ($current_scholarship_image as $images) {
                 $image_name = Str::random(10);
                 $image = Image::make($images);
@@ -221,11 +244,44 @@ class SectionController extends Controller
                 $image->resize(250, 125);
                 $thImage = $image->save($thumbnail);
 
-                $fileName[] = $imageName;
-            }
+                $fileName1[$i]['name'] = $imageName;
+                $fileName1[$i]['country'] = 1;
+            $i++;}
 
-            return $fileName;
         }
+
+        $current_scholarship_image_bd = $request->file('current_scholarship_image_bd');
+        if ($request->hasFile('current_scholarship_image_bd')) {
+            $fileName2 = [];
+            $i = 0;
+            foreach ($current_scholarship_image_bd as $images) {
+                $image_name = Str::random(10);
+                $image = Image::make($images);
+                $fileType = $images->getClientOriginalExtension();
+                $imageName = 'current_scholarship_' . $image_name . '.' . $fileType;
+                $directory = 'admin/image/section/current_scholarship/';
+                $imageUrl = $directory . $imageName;
+                $image->save($imageUrl);
+
+                $thumbnail = $directory . "thumbnail/" . $imageName;
+                $image->resize(250, 125);
+                $thImage = $image->save($thumbnail);
+
+                $fileName2[$i]['name'] = $imageName;
+                $fileName2[$i]['country'] = 2;
+            $i++;}
+
+        }
+
+        if(!empty($fileName1) && !empty($fileName2)){
+            $fullArray = array_merge($fileName1, $fileName2);
+            return $fullArray;
+        }elseif(!empty($fileName1)){
+            return $fileName1;
+        }elseif(!empty($fileName2)){
+            return $fileName2;
+        }
+
     }
 
     protected function about_company_image($request)
@@ -247,7 +303,7 @@ class SectionController extends Controller
                 $image->resize(250, 125);
                 $thImage = $image->save($thumbnail);
 
-                $fileName[] = $imageUrl;
+                $fileName[] = $imageName;
             }
 
             return $fileName;
@@ -305,12 +361,15 @@ class SectionController extends Controller
 
         $banner_content = $request->banner_content;
         $banner_link = $request->banner_link;
+        $country = $request->country;
+        
         $banner_data = [];
         foreach ($request->banner_title as $key => $banners_titles) {
             $banner_data[$key]['banner_title'] = $banners_titles;
             $banner_data[$key]['banner_content'] = $banner_content[$key];
             $banner_data[$key]['banner_link'] = $banner_link[$key];
             $banner_data[$key]['banner_image'] = $imageUrl[$key];
+            $banner_data[$key]['country'] = $country[$key];
         }
         $section->section_value = json_encode($banner_data);
         $section->save();
@@ -538,6 +597,36 @@ class SectionController extends Controller
         } else if ($input['section_type'] == 'about_vision') {
             $this->about_vision_validate($request);
             $this->sectionAboutVisionBasicInfoSave($request);
+        } else if ($input['section_type'] == 'carrer_section') {
+            $request->validate([
+                'carrer_description' => 'required',
+            ]);
+
+            $section = new Section;
+            $section->section_name = $request->section_name;
+            $section->section_type = $request->section_type;
+            $section->section_value = $request->carrer_description;
+            $section->save();
+        } else if ($input['section_type'] == 'franchise_section') {
+            $request->validate([
+                'franchise_description' => 'required',
+            ]);
+
+            $section = new Section;
+            $section->section_name = $request->section_name;
+            $section->section_type = $request->section_type;
+            $section->section_value = $request->franchise_description;
+            $section->save();
+        } else if ($input['section_type'] == 'scholarship_section') {
+            $request->validate([
+                'scholarship_description' => 'required',
+            ]);
+
+            $section = new Section;
+            $section->section_name = $request->section_name;
+            $section->section_type = $request->section_type;
+            $section->section_value = $request->scholarship_description;
+            $section->save();
         }
 
         return redirect()->route('backend.manage-section')->with('success', 'Section has been added successfully !!');
@@ -599,10 +688,56 @@ class SectionController extends Controller
         $banner_section->section_name = $request->section_name;
         $banner_section->section_type = $request->section_type;
 
+        $bannner_title = $request->banner_title;
+        $banner_content = $request->banner_content;
+        $banner_link = $request->banner_link;
+        $country = $request->country;
+        
+        // echo '<pre>'; print_r($country); die();
+
+        $old_imageUrl = $request->old_banner_image;
+        $replace_array = array();
+
+        foreach ($old_imageUrl as $key => $old_imageUrls) {
+            foreach ($imageUrl as $key1 => $imageUrls) {
+                if ($key1 == $key) {
+                    $old_imageUrl[$key] = $imageUrls;
+                    unset($imageUrl[$key]);
+                }
+            }
+        }
+
+        if (!empty($imageUrls)) {
+            $new_image_url = array_merge($old_imageUrl, $imageUrl);
+        } else {
+            $new_image_url = $old_imageUrl;
+        }
+
+        foreach ($request->banner_title as $key => $banners_titles) {
+            $banner_data[$key]['banner_title'] = $banners_titles;
+            $banner_data[$key]['banner_content'] = $banner_content[$key];
+            $banner_data[$key]['banner_link'] = $banner_link[$key];
+            $banner_data[$key]['banner_image'] = $new_image_url[$key];
+            $banner_data[$key]['country'] = $country[$key];
+        }
+
+        $banner_section->section_value = json_encode($banner_data);
+        $banner_section->save();
+    }
+
+    //Banner Update Info--------------------
+    protected function bannerBasicInfoupdate_new($request, $imageUrl, $id)
+    {
+
+        $banner_section = Section::find($id);
+        $banner_section->section_name = $request->section_name;
+        $banner_section->section_type = $request->section_type;
+
 
         $bannner_title = $request->banner_title;
         $banner_content = $request->banner_content;
         $banner_link = $request->banner_link;
+        $country = $request->country;
 
         $banner_data = [];
         foreach ($request->banner_title as $key => $banners_titles) {
@@ -610,13 +745,10 @@ class SectionController extends Controller
             $banner_data[$key]['banner_content'] = $banner_content[$key];
             $banner_data[$key]['banner_link'] = $banner_link[$key];
             $banner_data[$key]['banner_image'] = $imageUrl[$key];
+            $banner_data[$key]['country'] = $country[$key];
         }
 
         $banner_section->section_value = json_encode($banner_data);
-
-        // echo '<pre>';
-        // print_r($banner_section);
-        // die();
         $banner_section->save();
     }
 
@@ -735,6 +867,28 @@ class SectionController extends Controller
     }
 
     //Current Scholorship update-------------------------
+    
+       protected function home_current_scholarship_update_new($req,$imageUrl)
+      {
+            $data['current_scholarship_title']=$req->current_scholarship_title;
+            $data['current_scholarship_image']=$imageUrl;
+    
+            $old_data=Section::find($req->section_id)->toArray();
+    
+            $old_data_data=json_decode($old_data['section_value'],true);
+    
+            $old_data_data['current_scholarship_title']=$data['current_scholarship_title'];
+            $old_data_data['current_scholarship_image']=array_merge($old_data_data['current_scholarship_image'],$data['current_scholarship_image']);
+    
+          
+            $section =Section::find($req->section_id);
+            $section->section_name=$req->section_name;
+            $section->section_type=$req->section_type; 
+            $section->section_value=json_encode($old_data_data);
+      
+            $section->save();  
+      } 
+      
     protected function home_current_scholarship_update($req, $imageUrl)
     {
         $data['current_scholarship_title'] = $req->current_scholarship_title;
@@ -761,6 +915,29 @@ class SectionController extends Controller
         $section->section_type = $request->section_type;
         $section->section_value = json_encode($data);
 
+        $section->save();
+    }
+    
+     protected function about_the_company_update_new($request,$image_url)
+    {
+        $data['company_title']=$request->company_title;
+        $data['company_description']=$request->company_description;
+        $data['company_image']=$image_url;
+
+        $old_data=Section::find($request->section_id)->toArray();
+
+        $old_data_data=json_decode($old_data['section_value'],true);
+
+        $old_data_data['company_title']=$data['company_title'];
+        $old_data_data['company_description']=$data['company_description'];
+        $old_data_data['company_image']=array_merge($old_data_data['company_image'],$data['company_image']);
+
+    
+
+        $section =Section::find($request->section_id);
+        $section->section_name=$request->section_name;
+        $section->section_type=$request->section_type; 
+        $section->section_value=json_encode($old_data_data);
         $section->save();
     }
 
@@ -812,42 +989,58 @@ class SectionController extends Controller
 
         if ($input['section_type'] == 'banner') {
 
-            if ($req->banner_image) {
+            if($req->banner_image)
+            {
+                
+                // $data=Section::find($input['section_id'])->toArray();
 
-                $data = Section::find($input['section_id'])->toArray();
+                // if (!empty($req->old_banner_image)) {
+                //     foreach($req->old_banner_image as $banner_images)
+                //     {
+                        
+                //         if (File::exists($banner_images)) {
+                //             unlink($banner_images);
+                //         }
+                //     }
+                // }
 
-                if (!empty($req->old_banner_image)) {
-                    foreach ($req->old_banner_image as $banner_images) {
+               $imageUrl = $this->bannerImage_update_Upload($req);
+            
 
-                        if (File::exists($banner_images)) {
-                            unlink($banner_images);
-                        }
-                    }
-                }
+               $this->bannerBasicInfoupdate($req, $imageUrl,$input['section_id']);
+            }
+            else
+            {
 
-                $imageUrl = $this->bannerImageUpload($req);
-
-                $this->bannerBasicInfoupdate($req, $imageUrl, $input['section_id']);
-            } else {
-
-                $imageUrl = $req->old_banner_image;
-                $this->bannerBasicInfoupdate($req, $imageUrl, $input['section_id']);
+                $imageUrl=$req->old_banner_image;
+                $this->bannerBasicInfoupdate_new($req,$imageUrl,$input['section_id']);
+ 
+                
             }
         } else if ($input['section_type'] == 'home_aboutus') {
-            // echo '<pre>';
-            //echo 'hiii';
-            // print_r($req->about_us_image);
-            // die();
+
 
             if ($req->about_us_image) {
 
+                $this->about_us_Validate($req);
+                
                 if (File::exists('admin/image/section/home_about/' . $req->old_about_image)) {
                     unlink('admin/image/section/home_about/' . $req->old_about_image);
+                }
+                if (File::exists('admin/image/section/home_about/thumbnail/'.$req->old_about_image))
+                {
+                    unlink('admin/image/section/home_about/thumbnail/'.$req->old_about_image);
                 }
 
                 $imageUrl = $this->home_about_image($req);
                 $this->home_about_us_update($req, $imageUrl);
             } else {
+                
+                 $req->validate([
+                    'about_us_title' => 'required',
+                    'about_us_sub_title' => 'required',
+                    'trusted' => 'required'
+                ]);
 
                 $imageUrl = $req->old_about_image;
 
@@ -857,18 +1050,29 @@ class SectionController extends Controller
             $this->skill_Validate($req);
             $this->sectionSkillsBasicInfoUpdate($req);
         } else if ($input['section_type'] == 'home_faq') {
-            $this->faqInfoValidate($req);
+
 
             if ($req->faq_image) {
-
+                $this->faqInfoValidate($req);
                 if (File::exists('admin/image/section/faq-image/' . $req->old_faq_image)) {
                     unlink('admin/image/section/faq-image/' . $req->old_faq_image);
+                }
+                 if (File::exists('admin/image/section/faq-image/thumbnail/'.$req->old_faq_image))
+                {
+                    unlink('admin/image/section/faq-image/thumbnail/'.$req->old_faq_image);
                 }
 
                 $imageUrl = $this->faqImageUpload($req);
                 $this->sectionFaqBasicInfoUpdate($req, $imageUrl);
             } else {
-
+                
+                $req->validate([
+                    'tagline' => 'required',
+                    'title' => 'required',
+                    'number_of_faq' => 'required',
+                    'image_title'=> 'required'
+                ]);
+                
                 $imageUrl = $req->old_faq_image;
 
                 $this->sectionFaqBasicInfoUpdate($req, $imageUrl);
@@ -890,59 +1094,36 @@ class SectionController extends Controller
             $this->home_partner_Validate($req);
             $this->sectionHomePartnerBasicInfoUpdate($req);
         } else if ($input['section_type'] == 'home_current_scholarship') {
-            $this->home_current_scholarship_update_Validate($req);
 
-            if ($req->current_scholarship_image) {
 
-                $old_image = json_decode($req->old_current_scholarship_image, true);
-                // echo '<pre>';
-                // print_r($old_image);
-                // die();
-                if (!empty($old_image)) {
-                    foreach ($old_image as $old_images) {
-                        if (File::exists('admin/image/section/current_scholarship/' . $old_images)) {
-                            unlink('admin/image/section/current_scholarship/' . $old_images);
-                        }
-                        if (File::exists('admin/image/section/current_scholarship/thumbnail/' . $old_images)) {
-                            unlink('admin/image/section/current_scholarship/thumbnail/' . $old_images);
-                        }
-                    }
-                }
-
+            if ($req->current_scholarship_image || $req->current_scholarship_image_bd) {
+                $this->home_current_scholarship_Validate($req);
                 $imageUrl = $this->home_current_scholarship_image($req);
 
-                $this->home_current_scholarship_update($req, $imageUrl);
+                $this->home_current_scholarship_update_new($req, $imageUrl);
             } else {
-
+                $this->home_current_scholarship_update_Validate($req);
                 $imageUrl = json_decode($req->old_current_scholarship_image);
                 $this->home_current_scholarship_update($req, $imageUrl);
             }
         } else if ($input['section_type'] == 'about_the_company') {
-            $this->about_the_company_update_Validate($req);
 
             if ($req->company_image) {
+                $this->about_the_company_Validate($req);
                 $old_image = json_decode($req->old_company_image, true);
 
-                if (!empty($old_image)) {
-                    foreach ($old_image as $old_images) {
-                        if (File::exists('admin/image/section/company_image/' . $old_images)) {
-                            unlink('admin/image/section/company_image/' . $old_images);
-                        }
-                        if (File::exists('admin/image/section/company_image/thumbnail/' . $old_images)) {
-                            unlink('admin/image/section/company_image/thumbnail/' . $old_images);
-                        }
-                    }
-                }
                 $imageUrl = $this->about_company_image($req);
-                $this->about_the_company_update($req, $imageUrl);
+                $this->about_the_company_update_new($req, $imageUrl);
             } else {
+                $this->about_the_company_update_Validate($req);
+                
                 $imageUrl = json_decode($req->old_company_image);
                 $this->about_the_company_update($req, $imageUrl);
             }
         } else if ($input['section_type'] == 'about_director_message') {
-            $this->about_director_message_update_Validate($req);
 
             if ($req->director_image) {
+                $this->about_director_message_Validate($req);
                 if ($req->old_director_image != '') {
 
                     if (File::exists('admin/image/section/director_image/' . $req->old_director_image)) {
@@ -955,6 +1136,7 @@ class SectionController extends Controller
                 $imageUrl = $this->about_director_image($req);
                 $this->sectionDirectorMessageBasicInfoUpdate($req, $imageUrl);
             } else {
+                $this->about_director_message_update_Validate($req);
                 $imageUrl = $req->old_director_image;
                 $this->sectionDirectorMessageBasicInfoUpdate($req, $imageUrl);
             }
@@ -962,10 +1144,10 @@ class SectionController extends Controller
             $this->about_our_team_validate($req);
             $this->sectionOurTeamBasicInfoUpdate($req);
         } else if ($input['section_type'] == 'about_vision') {
-            $this->about_vision_update_validate($req);
-            if ($req->vision_image) {
-                if ($req->old_vision_image != '') {
 
+            if ($req->vision_image) {
+                $this->about_vision_validate($req);
+                if ($req->old_vision_image != '') {
                     if (File::exists('admin/image/section/vision_image/' . $req->old_vision_image)) {
                         unlink('admin/image/section/vision_image/' . $req->old_vision_image);
                     }
@@ -977,11 +1159,98 @@ class SectionController extends Controller
                 $imageUrl = $this->about_vision_image($req);
                 $this->sectionAboutVisionBasicInfoUpdate($req, $imageUrl);
             } else {
+                $this->about_vision_update_validate($req);
                 $imageUrl = $req->old_vision_image;
                 $this->sectionAboutVisionBasicInfoUpdate($req, $imageUrl);
             }
         }
+         else if ($input['section_type'] == 'carrer_section') {
+            $req->validate([
+                'carrer_description' => 'required',
+            ]);
+
+            $section = Section::find($req->section_id);
+            $section->section_name = $req->section_name;
+            $section->section_type = $req->section_type;
+            $section->section_value = $req->carrer_description;
+            $section->save();
+
+        }
+        else if ($input['section_type'] == 'franchise_section') {
+            $req->validate([
+                'franchise_description' => 'required',
+            ]);
+
+            $section = Section::find($req->section_id);
+            $section->section_name = $req->section_name;
+            $section->section_type = $req->section_type;
+            $section->section_value = $req->franchise_description;
+            $section->save();
+
+        } else if ($input['section_type'] == 'scholarship_section') {
+            $req->validate([
+                'scholarship_description' => 'required',
+            ]);
+
+            $section = Section::find($req->section_id);;
+            $section->section_name = $req->section_name;
+            $section->section_type = $req->section_type;
+            $section->section_value = $req->scholarship_description;
+            $section->save();
+        }
 
         return redirect()->route('backend.manage-section')->with('success', 'Section has been update successfully !!');
+    }
+    
+     public function delete_current_image(Request $req)
+    {
+        $id=$req->id;
+        echo $image_name=$req->image_name;
+
+        $current_scholarship=Section::where('id',$id)->get()->toArray();
+        $current_scholarship_new=json_decode($current_scholarship[0]['section_value'],true);
+       
+        // echo '<pre>';
+        // print_r($current_scholarship_new);
+        
+        foreach($current_scholarship_new['current_scholarship_image'] as $key=>$current_scholarship_news)
+        {
+            if($current_scholarship_news['name'] == $image_name)
+            {
+                unset($current_scholarship_new['current_scholarship_image'][$key]);
+
+            }
+        }
+
+        $section =Section::find($id);
+        $section->section_value=json_encode($current_scholarship_new);
+        $section->save(); 
+        echo 'success';
+    }
+    
+     public function delete_company_image(Request $req)
+    {
+        $id=$req->id;
+        echo $image_name=$req->image_name;
+
+        $company_image=Section::where('id',$id)->get()->toArray();
+        $company_image_new=json_decode($company_image[0]['section_value'],true);
+
+        
+        foreach($company_image_new['company_image'] as $key=>$company_image_news)
+        {
+            if($company_image_news == $image_name)
+            {
+                unset($company_image_new['company_image'][$key]);
+
+            }
+        }
+        // echo '<pre>';
+        // print_r($company_image_new);die();
+
+        $section =Section::find($id);
+        $section->section_value=json_encode($company_image_new);
+        $section->save(); 
+        echo 'success';
     }
 }

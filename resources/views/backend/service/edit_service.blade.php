@@ -3,7 +3,7 @@
 @section('content')
 <div class="card">
     <div class="card-body">
-        <form id="formService" action="{{route('backend.update-service')}}" method="POST" enctype="multipart/form-data">
+        <form id="editService" action="{{route('backend.update-service')}}" method="POST" enctype="multipart/form-data">
             @csrf
 
             <input type="hidden" name="id" value="{{$service->id}}">
@@ -65,13 +65,23 @@
 			</div>
             <div class="form-group mb-2">
                 <label>Service Description</label>
-                <div id="editor" style="height: 300px;">{!!$service->service_description!!}</div>
-                <textarea name="service_description" style="display:none" id="hiddenArea"></textarea>
+                 
+                <textarea name="service_description" id="summernote_editor" >{!!$service->service_description!!}</textarea>
 
                 @error('service_description')
                 <strong class="text-danger">{{ $message }}</strong>
                 @enderror
             </div>
+            
+            <div class="form-group mb-2">
+                <label>Service Header Top Image</label>
+                <input type="file" class="imageupload" name="service_header_image" data-default-file="{{asset($service->service_header_image)}}">
+    
+                @error('service_header_image')
+                <strong class="text-danger">{{ $message }}</strong>
+                @enderror
+            </div>
+            
             <div class="form-group mb-2">
                 <label>Service Image</label>
                 <input type="file" class="imageupload" name="service_image" data-default-file="{{asset($service->service_image)}}">
@@ -94,52 +104,9 @@
 </div>
 
 <script type="text/javascript">
-    $(document).ready(function() {
-        $("#formService").on("submit", function() {
-            $("#hiddenArea").val($(".ql-editor").html());
-        })
-    });
+   
 
     $('.imageupload').dropify();
-    var quill = new Quill("#editor", {
-        theme: "snow",
-        modules: {
-            toolbar: [
-                [{
-                    font: []
-                }, {
-                    size: []
-                }],
-                ["bold", "italic", "underline", "strike"],
-                [{
-                    color: []
-                }, {
-                    background: []
-                }],
-                [{
-                    script: "super"
-                }, {
-                    script: "sub"
-                }],
-                [{
-                    header: [!1, 1, 2, 3, 4, 5, 6]
-                }, "blockquote", "code-block"],
-                [{
-                    list: "ordered"
-                }, {
-                    list: "bullet"
-                }, {
-                    indent: "-1"
-                }, {
-                    indent: "+1"
-                }],
-                ["direction", {
-                    align: []
-                }],
-                ["link", "image", "video"],
-                ["clean"]
-            ]
-        }
-    })
+    $('#summernote_editor').summernote( );
 </script>
 @endsection

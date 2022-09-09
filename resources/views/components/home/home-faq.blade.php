@@ -33,7 +33,7 @@
                 <div class="we-change__right">
                     <div class="we-change__right-img">
 
-                        <img class="lazy" data-original="{{ asset($faq->faq_image) }}" alt="">
+                        <img class="lazy" data-original="{{ asset('admin/image/section/faq-image/')}}/{{$faq->faq_image}}" alt="">
                         <div class="we-change__agency">
                             <div class="we-change__agency-icon">
                                 <span class="icon-development"></span>

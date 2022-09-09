@@ -3,7 +3,7 @@
 @section('content')
 <div class="card">
 	<div class="card-body">
-		<form id="formBlog" action="{{route('backend.update-blog')}}" method="POST" enctype="multipart/form-data">
+		<form id="formBlogedit" action="{{route('backend.update-blog')}}" method="POST" enctype="multipart/form-data">
             @csrf
 			<input type="hidden" name="id" value="{{$blog->id}}">
 
@@ -52,12 +52,12 @@
 
                 <select name="related_post[]" class="form-control @error('related_post') is-invalid @enderror select2-multiple"
                 id="relatedPost" data-width="100%" multiple="multiple" data-placeholder="Choose ...">
-                   @foreach($blogs as $blog)
-                        <option value="{{ $blog->id }}" >{{ $blog->blog_title }}</option>
+                   @foreach($blogs as $blog_new)
+                        <option value="{{ $blog_new->id }}" >{{ $blog_new->blog_title }}</option>
                         @if($relatedPost != '')
                             @foreach($relatedPost as $post)
-                                <option value="{{ $blog->id }}" 
-                                {{$post->blog_title == $blog->blog_title ? 'selected' : ''}}>{{ $blog->blog_title }}</option>
+                                <option value="{{ $blog_new->id }}" 
+                                {{$post->blog_title == $blog_new->blog_title ? 'selected' : ''}}>{{ $blog_new->blog_title }}</option>
                             @endforeach
                         @endif
                     @endforeach
@@ -91,7 +91,6 @@
 				<label>Blog Image</label>
 				<input type="file" class="imageupload @error('blog_image') is-invalid @enderror" name="blog_image"
                 data-default-file="{{asset($blog->blog_image)}}">
-                
                 @error('blog_image')
                     <strong class="text-danger">{{ $message }}</strong>
                 @enderror

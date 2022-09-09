@@ -3,7 +3,7 @@
 @section('content')
 <div class="card">
     <div class="card-body">
-        <form id="formTestimonial" action="{{route('backend.update-testimonial')}}" method="POST" enctype="multipart/form-data">
+        <form id="editTestimonial" action="{{route('backend.update-testimonial')}}" method="POST" enctype="multipart/form-data">
             @csrf
             <input type="hidden" name="id" value="{{$testimonial->id}}">
 
@@ -32,6 +32,21 @@
                 <strong class="text-danger">{{ $message }}</strong>
                 @enderror
             </div>
+            <!--   <div class="form-group mb-2">-->
+            <!--    <label>User Video</label>-->
+            <!--    <input type="file" class="imageupload" name="user_video" data-default-file="{{ asset('admin/image/testimonial')}}/{{$testimonial->testimonial_video}}">-->
+
+            <!--    @error('user_video')-->
+            <!--    <strong class="text-danger">{{ $message }}</strong>-->
+            <!--    @enderror-->
+            <!--</div>-->
+            <div class="form-group mb-2">
+                <label>User Video Url</label>
+                <input type="text" class="form-control" name="user_video_url" value="{{$testimonial->user_video_url}}">
+                @error('user_video_url')
+                <strong class="text-danger">{{ $message }}</strong>
+                @enderror
+            </div>
             <div class="form-group mb-2">
                 <label>User rating</label>
                 <input type="number" min="0" max="5" class="form-control @error('user_rating') is-invalid @enderror" name="user_rating"
@@ -55,7 +70,7 @@
 <script type="text/javascript">
 
     $(document).ready(function() {
-        $("#formTestimonial").on("submit", function() {
+        $("#editTestimonial").on("submit", function() {
             $("#hiddenArea").val($(".ql-editor").html());
         })
     });

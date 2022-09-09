@@ -26,6 +26,7 @@ class UserManageController extends Controller
         $this->middleware('permission:editor_permission');
         //$this->middleware('role:admin|writer')->only('testmiddleware');
         //$this->module_name = 'editor';
+         $this->module_name = 'users';
     }
     
     protected function userValidate($request){

@@ -4,7 +4,7 @@
 
 <div class="card">
 	<div class="card-body">
-      <form method="post" id="addteam" action="{{route('backend.update_our_team')}}" enctype="multipart/form-data"> 
+      <form method="post" id="editteam" action="{{route('backend.update_our_team')}}" enctype="multipart/form-data"> 
             @csrf
             <input type="hidden" name="team_id" id="" value="{{$team['id']}}">
             <input type="hidden" name="old_image" id="" value="{{$team['member_image']}}">
@@ -31,48 +31,10 @@
                 @enderror
 			</div>
 			
-			<div class="form-group mb-2">
-				<label>Social Link</label>
-				<div class="input-group mb-2">
-                    <div class="input-group-text">Facebook</div>
-                    <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Facebook" name="facebook" value="{{$team['facebook']}}">
-                </div>
-                @error('facebook')
-                <strong class="text-danger">{{ $message }}</strong>
-                @enderror
-                <div class="input-group mb-2">
-                    <div class="input-group-text">Twitter</div>
-                    <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Twitter" name="twitter" value="{{$team['twitter']}}">
-                </div>
-                @error('twitter')
-                <strong class="text-danger">{{ $message }}</strong>
-                @enderror
-                <div class="input-group mb-2">
-                    <div class="input-group-text">Pinterest</div>
-                    <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Pinterest" name="pinterest" value="{{$team['pinterest']}}">
-                </div>
-                @error('pinterest')
-                <strong class="text-danger">{{ $message }}</strong>
-                @enderror
-                <div class="input-group mb-2">
-                    <div class="input-group-text">Instagram</div>
-                    <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Instagram" name="instagram" value="{{$team['instagram']}}">
-                </div>
-                @error('instagram')
-                <strong class="text-danger">{{ $message }}</strong>
-                @enderror
-                <div class="input-group mb-2">
-                    <div class="input-group-text">Linkedin</div>
-                    <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Linkedin" name="linkedin" value="{{$team['linkedin']}}">
-                </div>
-                @error('linkedin')
-                <strong class="text-danger">{{ $message }}</strong>
-                @enderror
-                <div class="input-group mb-2">
-                    <div class="input-group-text">Youtube</div>
-                    <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Youtube" name="youtube" value="{{$team['youtube']}}">
-                </div>
-                @error('youtube')
+		   <div class="form-group mb-2">
+				<label>Description</label>
+	            <textarea name="member_description" id="editor1" cols="30" rows="5" class="form-control">{{$team['member_description']}}</textarea>
+                @error('member_description')
                 <strong class="text-danger">{{ $message }}</strong>
                 @enderror
 			</div>
@@ -94,6 +56,10 @@
 
 <script type="text/javascript">
 	$('.imageupload').dropify(); 
+	 ClassicEditor.create(document.querySelector('#editor1'))
+    .then(editor => {
+        editor.ui.view.editable.element.style.height = '200px';
+    })
 </script>
 
 @endsection

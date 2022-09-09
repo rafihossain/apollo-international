@@ -31,7 +31,9 @@
                         @if($category->id != 0)
                         <td>
                             <a href="{{ route('backend.edit-category', $category->id) }}" class="btn btn-sm btn-success"><i class="mdi mdi-file-edit-outline"></i></a>
+                            @if((session()->get('user_type') == '1') || (session()->get('user_type') == '2') || (session()->get('user_type') == '3'))
                             <a href="{{ route('backend.delete-category', $category->id) }}" id="delete" class="btn btn-sm btn-danger"><i class="mdi mdi-trash-can-outline"></i></a>
+                           @endif 
                         </td>
                         @endif
                     </tr>

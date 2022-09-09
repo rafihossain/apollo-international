@@ -57,6 +57,7 @@ class PartnerController extends Controller
         // echo "<pre>"; print_r($_POST); die();
         $partner->partner_name = $request->partner_name;
         $partner->partner_category = $request->partner_category;
+        $partner->partner_sorting = $request->partner_sorting;
         if($imageUrl){
             $partner->partner_image = $imageUrl;
         }
@@ -69,7 +70,7 @@ class PartnerController extends Controller
     }
     
     public function managePartner(){
-        $partners = Partner::get();
+        $partners = Partner::orderBy('partner_sorting', 'ASC')->get();
         return view('backend.partner.manage_partner', [
             'partners' => $partners
         ]);

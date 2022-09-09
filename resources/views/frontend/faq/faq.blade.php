@@ -1,18 +1,17 @@
 @extends('frontend.layouts.app')
 
+@section('title', $other['meta_title'])
+@section('keywords', $other['meta_keywords'])
+@section('description', $other['meta_description'])
+
 @section('content') 
 <!--Page Header Start-->
-<section class="page-header" style="background-image: url({{ asset('frontend/assets/images/backgrounds/group-of-multiethnic-students-on-graduation-day.jpg') }});">
+<section class="page-header" style="background-image: url({{ asset('frontend/assets/images/resources/FAQS-BAR.jpg') }});">
     <div class="page-header-shape-1"></div>
     <div class="page-header-shape-2"></div>
     <div class="container">
         <div class="page-header__inner">
-            <ul class="thm-breadcrumb list-unstyled">
-                <li><a href="index.html">Home</a></li>
-                <li><span>.</span></li>
-                <li>Faq</li>
-            </ul>
-            <h2>Faq</h2>
+            <h2>Frequently Asked Questions (FAQs)</h2>
         </div>
     </div>
 </section>
@@ -39,7 +38,7 @@
                             @endforeach
 
 
-                            @if($faqs->hasPages())
+                            {{-- @if($faqs->hasPages())
                             <div class="text-center m-3">
                                 @if($faqs->onFirstPage())
                                     <span href="{{ $faqs->previousPageUrl() }}"><span class="fw-bold fs-4"><i class="fa fa-angle-double-left"></i> Previous</span></span>
@@ -56,6 +55,8 @@
                                 @endif
                             </div>
                             @endif
+                            
+                            --}}
 
 
                         </div>
